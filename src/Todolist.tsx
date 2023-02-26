@@ -1,38 +1,51 @@
 import React from "react";
-import {TaskType} from "./App";
+import {FilterType, TaskType} from "./App";
 
 type TodolistType = {
     title: string
-    tasks: TaskType[]
+    filterTasks: TaskType[]
+    deleteTask:(idTask:number)=>void
+    filterTodolist:(valueFilter:FilterType)=>void
 }
 
-export const Todolist = (props: TodolistType) => {
+export const Todolist = ({title,filterTasks,deleteTask,filterTodolist}: TodolistType) => {
+
+    const onClickDeleteHundler = (idTask:number) => {
+        deleteTask(idTask)
+    }
+
+    const onClickFiltrHundler = (valueFilter:FilterType) => {
+        filterTodolist(valueFilter)
+    }
+
     return (
         <div>
 
-            <h3>{props.title}</h3>
+            <h3>{title}</h3>
             <div>
                 <input/>
                 <button>CREATE</button>
             </div>
             <ul>
                 {
-                    props.tasks.map(e => {
+                    filterTasks.map(e => {
                         return (
                             <li key={e.id}>
                                 <input
                                     type="checkbox"
                                     checked={e.isDone}/>
                                 <span>{e.title}</span>
+                                <button onClick={()=>onClickDeleteHundler(e.id)}>DELETE</button>
+
                             </li>
                         )
                     })
                 }
             </ul>
             <div>
-                <button>All</button>
-                <button>New</button>
-                <button>Completed</button>
+                <button onClick={()=>onClickFiltrHundler('all')}>All</button>
+                <button onClick={()=>onClickFiltrHundler('new')}>New</button>
+                <button onClick={()=>onClickFiltrHundler('completed')}>Completed</button>
             </div>
 
         </div>
