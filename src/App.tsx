@@ -22,8 +22,12 @@ function App() {
 
     const [filter,setFilter]=useState<FilterType>('all')
 
+    const changeCheckboxTask = (idTask:string,valueCheckbox:boolean) => {
+        setTasks(tasks.map(el=>el.id===idTask?{...el,isDone: valueCheckbox}:el))
+    }
+
     const createTask = (text:string) => {
-        setTasks([{id: v1(), title:text , isDone: true},...tasks])
+        setTasks([{id: v1(), title:text , isDone: false},...tasks])
     }
 
 
@@ -45,6 +49,8 @@ function App() {
     return (
         <div className="App">
             <Todolist
+                filter={filter}
+                changeCheckboxTask={changeCheckboxTask}
                 createTask={createTask}
                 filterTodolist={filterTodolist}
                 deleteTask={deleteTask}

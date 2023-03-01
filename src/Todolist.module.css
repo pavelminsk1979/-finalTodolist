@@ -1,0 +1,19 @@
+.inputError{
+    border: red 2px solid;
+}
+
+.messageError {
+    color: red;
+}
+
+.buttonFiltr {
+    background-color: red;
+    color: #282c34;
+    border: red 1px solid;
+    border-radius: 5px;
+padding: 5px;
+}
+
+.completeTask{
+    opacity: 0.5;
+}
