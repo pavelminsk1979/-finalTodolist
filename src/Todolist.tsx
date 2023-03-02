@@ -1,52 +1,49 @@
-import React, {ChangeEvent,KeyboardEvent, useState} from "react";
+import React, {useState} from "react";
 import {FilterType, TaskType} from "./App";
 import stule from "./Todolist.module.css";
+import {Button} from "./Button";
+import {Input} from "./Input";
+import {Checkbox} from "./Checkbox";
 
 type TodolistType = {
-    filter:FilterType
+    filter: FilterType
     title: string
     filterTasks: TaskType[]
-    deleteTask:(idTask:string)=>void
-    changeCheckboxTask:(idTask:string,valueCheckbox:boolean)=>void
-    filterTodolist:(valueFilter:FilterType)=>void
-    createTask:(text:string)=>void
+    deleteTask: (idTask: string) => void
+    changeCheckboxTask: (idTask: string, valueCheckbox: boolean) => void
+    filterTodolist: (valueFilter: FilterType) => void
+    createTask: (text: string) => void
 }
 
-export const Todolist = ({title,filterTasks,deleteTask,filterTodolist,createTask,changeCheckboxTask,filter}: TodolistType) => {
+export const Todolist = ({
+                             title,
+                             filterTasks,
+                             deleteTask,
+                             filterTodolist,
+                             createTask,
+                             changeCheckboxTask,
+                             filter
+                         }: TodolistType) => {
 
-    const [text,setText]=useState('')
-    const [inputError,setInputError]=useState<string|null>(null)
+    const [text, setText] = useState('')
+    const [inputError, setInputError] = useState<string | null>(null)
 
-    const changeCheckboxTaskHundler = (idTask:string,valueCheckbox:boolean) => {
-        changeCheckboxTask(idTask,valueCheckbox)
-    }
-
-    const onChangeCreateText = (event:ChangeEvent<HTMLInputElement>) => {
-       if(inputError){setInputError(null)}
-        setText(event.currentTarget.value)
-    }
 
     const onClickCreateTask = () => {
-        if(text.trim()!==''){
+        if (text.trim() !== '') {
             createTask(text.trim())
             setText('')
-        }else {
+        } else {
             setInputError('Text reguared')
         }
 
     }
 
-    const onKeyPressCreateText = (e:KeyboardEvent<HTMLInputElement>) => {
-      if(e.key==='Enter'){
-          onClickCreateTask()
-      }
-    }
-
-    const onClickDeleteTask = (idTask:string) => {
+    const onClickDeleteTask = (idTask: string) => {
         deleteTask(idTask)
     }
 
-    const onClickFiltrTodolist = (valueFilter:FilterType) => {
+    const onClickFiltrTodolist = (valueFilter: FilterType) => {
         filterTodolist(valueFilter)
     }
 
@@ -55,46 +52,55 @@ export const Todolist = ({title,filterTasks,deleteTask,filterTodolist,createTask
 
             <h3>{title}</h3>
             <div>
-                <input
-                    className={inputError?stule.inputError:''}
-                    onKeyPress={onKeyPressCreateText}
-                    onChange={onChangeCreateText}
-                    value={text}/>
-                <button
-                    onClick={onClickCreateTask}
-                >CREATE</button>
+
+                <Input
+                    setInputError={setInputError}
+                    inputError={inputError}
+                    callback={onClickCreateTask}
+                    setText={setText}
+                    text={text}/>
+
+                <Button
+                    name={'CREATE'}
+                    callback={onClickCreateTask}/>
             </div>
-            {inputError?<div className={stule.messageError}>{inputError}</div>:<br/>}
+            {inputError ? <div className={stule.messageError}>{inputError}</div> : <br/>}
             <ul>
                 {
                     filterTasks.map(e => {
                         return (
-                            <li className={e.isDone?stule.completeTask:''}
+                            <li className={e.isDone ? stule.completeTask : ''}
                                 key={e.id}>
-                                <input
-                                    onChange={(event)=>changeCheckboxTaskHundler(
-                                        e.id,event.currentTarget.checked
-                                    )}
-                                    type="checkbox"
-                                    checked={e.isDone}/>
-                                <span>{e.title}</span>
-                                <button onClick={()=>onClickDeleteTask(e.id)}>DELETE</button>
 
+                                <Checkbox
+                                    valueChecked={e.isDone}
+                                    callback={(valueCheckbox) => changeCheckboxTask(e.id, valueCheckbox)}/>
+
+                                <span>{e.title}</span>
+
+                                <Button
+                                    name={'DELETE'}
+                                    callback={() => onClickDeleteTask(e.id)}/>
                             </li>
                         )
                     })
                 }
             </ul>
             <div>
-                <button
-                    className={filter==='all'?stule.buttonFiltr:''}
-                    onClick={()=>onClickFiltrTodolist('all')}>All</button>
-                <button
-                    className={filter==='new'?stule.buttonFiltr:''}
-                    onClick={()=>onClickFiltrTodolist('new')}>New</button>
-                <button
-                    className={filter==='completed'?stule.buttonFiltr:''}
-                    onClick={()=>onClickFiltrTodolist('completed')}>Completed</button>
+                <Button
+                    name={'All'}
+                    callback={() => onClickFiltrTodolist('all')}
+                    className={filter === 'all' ? stule.buttonFiltr : ''}/>
+
+                <Button
+                    name={'New'}
+                    callback={() => onClickFiltrTodolist('new')}
+                    className={filter === 'new' ? stule.buttonFiltr : ''}/>
+
+                <Button
+                    name={'Complete'}
+                    callback={() => onClickFiltrTodolist('completed')}
+                    className={filter === 'completed' ? stule.buttonFiltr : ''}/>
             </div>
 
         </div>
