@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
+import {CreateItemForm} from "./CreateItemForm";
 
 export type TaskType = {
     id: string
@@ -17,6 +18,10 @@ export type StateTodolistType = {
     filter: FilterType
 }
 
+export type StateTaskType = {
+    [key:string]:TaskType[]
+}
+
 function App() {
 
     const todolistId1 = v1()
@@ -28,7 +33,7 @@ function App() {
 
     ])
 
-    const [tasks, setTasks] = useState({
+    const [tasks, setTasks] = useState<StateTaskType>({
     [todolistId1]:[
         {id: v1(), title: 'REACT', isDone: true},
         {id: v1(), title: 'ANGULAR', isDone: false},
@@ -36,12 +41,18 @@ function App() {
         {id: v1(), title: 'English', isDone: false},
     ],
         [todolistId2]:[
-            {id: v1(), title: 'REACT', isDone: true},
-            {id: v1(), title: 'ANGULAR', isDone: false},
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'English', isDone: false},
+            {id: v1(), title: 'Rembo1', isDone: true},
+            {id: v1(), title: 'YouTube', isDone: false},
+            {id: v1(), title: 'Avatar', isDone: true}
         ],
     })
+
+    const createTodolistHundler = (text: string) => {
+        const newTodolistId=v1()
+        setTodolists([{
+            id: newTodolistId, title: text, filter: 'all'},...todolists])
+        setTasks({[newTodolistId]:[],...tasks})
+    }
 
     const createTask = (idTodolist: string,text: string) => {
         setTasks({...tasks,[idTodolist]:[
@@ -62,10 +73,19 @@ function App() {
         setTodolists(todolists.map(el=>el.id===idTodolist?{...el,filter:valueFilter}:el))
     }
 
+    const deleteTodolist = (idTodolist: string) => {
+        setTodolists(todolists.filter(e=>e.id!==idTodolist))
+        delete tasks[idTodolist]
+        setTasks({...tasks})
+    }
+
 
 
     return (
         <div className="App">
+
+           <CreateItemForm name={'NewTodolist'} callback={createTodolistHundler}/>
+
             {
                 todolists.map(todol => {
 
@@ -78,6 +98,7 @@ function App() {
 
                     return (
                         <Todolist
+                            deleteTodolist={deleteTodolist}
                             key={todol.id}
                             idTodolist={todol.id}
                             filter={todol.filter}

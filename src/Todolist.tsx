@@ -1,15 +1,17 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React from "react";
 import {FilterType, TaskType} from "./App";
 import stule from "./Todolist.module.css";
+import {CreateItemForm} from "./CreateItemForm";
 
 type TodolistType = {
     filter: FilterType
     title: string
     filterTasks: TaskType[]
-    deleteTask: (idTodolist: string,idTask: string) => void
-    changeCheckboxTask: (idTodolist: string,idTask: string, valueCheckbox: boolean) => void
-    filterTodolist: (idTodolist: string,valueFilter: FilterType) => void
-    createTask: (idTodolist: string,text: string) => void
+    deleteTask: (idTodolist: string, idTask: string) => void
+    deleteTodolist: (idTodolist: string) => void
+    changeCheckboxTask: (idTodolist: string, idTask: string, valueCheckbox: boolean) => void
+    filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
+    createTask: (idTodolist: string, text: string) => void
     idTodolist: string
 }
 
@@ -21,63 +23,44 @@ export const Todolist = ({
                              createTask,
                              changeCheckboxTask,
                              filter,
-                             idTodolist
+                             idTodolist, deleteTodolist
                          }: TodolistType) => {
 
-    const [text, setText] = useState('')
-    const [inputError, setInputError] = useState<string | null>(null)
 
     const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
-        changeCheckboxTask(idTodolist,idTask, valueCheckbox)
+        changeCheckboxTask(idTodolist, idTask, valueCheckbox)
     }
 
-    const onChangeCreateText = (event: ChangeEvent<HTMLInputElement>) => {
-        if (inputError) {
-            setInputError(null)
-        }
-        setText(event.currentTarget.value)
-    }
-
-    const onClickCreateTask = () => {
-        if (text.trim() !== '') {
-            createTask(idTodolist,text.trim())
-            setText('')
-        } else {
-            setInputError('Text reguared')
-        }
-
-    }
-
-    const onKeyPressCreateText = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            onClickCreateTask()
-        }
+    const createTaskHundler = (text: string) => {
+        createTask(idTodolist, text)
     }
 
     const onClickDeleteTask = (idTask: string) => {
-        deleteTask(idTodolist,idTask)
+        deleteTask(idTodolist, idTask)
     }
 
     const onClickFiltrTodolist = (valueFilter: FilterType) => {
-        filterTodolist(idTodolist,valueFilter)
+        filterTodolist(idTodolist, valueFilter)
+    }
+
+    const deleteTodolistHundler = () => {
+        deleteTodolist(idTodolist)
     }
 
     return (
         <div>
 
-            <h3>{title}</h3>
-            <div>
-                <input
-                    className={inputError ? stule.inputError : ''}
-                    onKeyPress={onKeyPressCreateText}
-                    onChange={onChangeCreateText}
-                    value={text}/>
+            <h3>{title}
                 <button
-                    onClick={onClickCreateTask}
-                >CREATE
+                    onClick={deleteTodolistHundler}
+                >DELETE
                 </button>
-            </div>
-            {inputError ? <div className={stule.messageError}>{inputError}</div> : <br/>}
+            </h3>
+
+            <CreateItemForm
+                name={'CREATE'}
+                callback={createTaskHundler}/>
+
             <ul>
                 {
                     filterTasks.map(e => {
