@@ -2,12 +2,15 @@ import React from "react";
 import {FilterType, TaskType} from "./App";
 import stule from "./Todolist.module.css";
 import {CreateItemForm} from "./CreateItemForm";
+import {EditModeTitle} from "./EditModeTitle";
 
 type TodolistType = {
     filter: FilterType
     title: string
     filterTasks: TaskType[]
     deleteTask: (idTodolist: string, idTask: string) => void
+    changeTitleTodolist: (idTodolist: string, editTitle: string) => void
+    changeTitleTask: (idTodolist: string, idTask: string, editTitle: string) => void
     deleteTodolist: (idTodolist: string) => void
     changeCheckboxTask: (idTodolist: string, idTask: string, valueCheckbox: boolean) => void
     filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
@@ -23,7 +26,7 @@ export const Todolist = ({
                              createTask,
                              changeCheckboxTask,
                              filter,
-                             idTodolist, deleteTodolist
+                             idTodolist, deleteTodolist, changeTitleTodolist, changeTitleTask
                          }: TodolistType) => {
 
 
@@ -47,10 +50,22 @@ export const Todolist = ({
         deleteTodolist(idTodolist)
     }
 
+    const changeTitleTodolistHundler = (editTitle: string) => {
+        changeTitleTodolist(idTodolist, editTitle)
+    }
+
+    const changeTitleTaskHundler = (idTask: string, editTitle: string) => {
+        changeTitleTask(idTodolist, idTask, editTitle)
+    }
+
     return (
         <div>
 
-            <h3>{title}
+            <h3>
+                <EditModeTitle
+                    callback={changeTitleTodolistHundler}
+                    title={title}/>
+
                 <button
                     onClick={deleteTodolistHundler}
                 >DELETE
@@ -73,7 +88,11 @@ export const Todolist = ({
                                     )}
                                     type="checkbox"
                                     checked={e.isDone}/>
-                                <span>{e.title}</span>
+                                <EditModeTitle
+                                    callback={(editTitle: string) => changeTitleTaskHundler(
+                                        e.id, editTitle)}
+                                    title={e.title}/>
+
                                 <button onClick={() => onClickDeleteTask(e.id)}>DELETE</button>
 
                             </li>
