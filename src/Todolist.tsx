@@ -3,6 +3,10 @@ import {FilterType, TaskType} from "./App";
 import stule from "./Todolist.module.css";
 import {CreateItemForm} from "./CreateItemForm";
 import {EditModeTitle} from "./EditModeTitle";
+import Button from "@mui/material/Button";
+import IconButton from '@mui/material/IconButton';
+import CancelPresentation from "@mui/icons-material/CancelPresentation";
+import DeleteForever from "@mui/icons-material/DeleteForever";
 
 type TodolistType = {
     filter: FilterType
@@ -66,14 +70,15 @@ export const Todolist = ({
                     callback={changeTitleTodolistHundler}
                     title={title}/>
 
-                <button
-                    onClick={deleteTodolistHundler}
-                >DELETE
-                </button>
+                <IconButton
+                    onClick={deleteTodolistHundler}>
+                    <DeleteForever/>
+                </IconButton>
+
             </h3>
 
             <CreateItemForm
-                name={'CREATE'}
+                name={'Task'}
                 callback={createTaskHundler}/>
 
             <ul>
@@ -93,7 +98,13 @@ export const Todolist = ({
                                         e.id, editTitle)}
                                     title={e.title}/>
 
-                                <button onClick={() => onClickDeleteTask(e.id)}>DELETE</button>
+                                <IconButton
+                                    size={"small"}
+                                    onClick={
+                                    () => onClickDeleteTask(e.id)}>
+                                    <CancelPresentation/>
+                                </IconButton>
+
 
                             </li>
                         )
@@ -101,18 +112,24 @@ export const Todolist = ({
                 }
             </ul>
             <div>
-                <button
-                    className={filter === 'all' ? stule.buttonFiltr : ''}
+                <Button
+                    color={'secondary'}
+                    size={filter === 'all' ? 'medium' : 'small'}
+                    variant={filter === 'all' ? "contained" : 'outlined'}
                     onClick={() => onClickFiltrTodolist('all')}>All
-                </button>
-                <button
-                    className={filter === 'new' ? stule.buttonFiltr : ''}
+                </Button>
+                <Button
+                    color={'secondary'}
+                    size={filter === 'new' ? 'medium' : 'small'}
+                    variant={filter === 'new' ? "contained" : 'outlined'}
                     onClick={() => onClickFiltrTodolist('new')}>New
-                </button>
-                <button
-                    className={filter === 'completed' ? stule.buttonFiltr : ''}
+                </Button>
+                <Button
+                    color={'secondary'}
+                    size={filter === 'completed' ? 'medium' : 'small'}
+                    variant={filter === 'completed' ? "contained" : 'outlined'}
                     onClick={() => onClickFiltrTodolist('completed')}>Completed
-                </button>
+                </Button>
             </div>
 
         </div>

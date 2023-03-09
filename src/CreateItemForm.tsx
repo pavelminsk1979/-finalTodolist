@@ -1,5 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import stule from "./Todolist.module.css";
+import IconButton from "@mui/material/IconButton";
+import PlusOne from "@mui/icons-material/PlusOne";
+import TextField from "@mui/material/TextField";
 
 type CreateItemFormType = {
     name:string
@@ -37,16 +40,22 @@ export const CreateItemForm = ({name,callback}: CreateItemFormType) => {
 
     return (
         <div>
-            <input
+            <TextField
+                color="secondary"
+                focused
                 className={inputError ? stule.inputError : ''}
                 onKeyPress={onKeyPressCreateText}
                 onChange={onChangeCreateText}
-                value={text}/>
+                value={text}
+                label="Text"
+                variant="outlined" />
 
-            <button
-                onClick={onClickCreateTask}
-            >{name}
-            </button>
+
+            <IconButton
+                onClick={onClickCreateTask}>
+                <PlusOne/>{name}
+            </IconButton>
+
 
             {inputError ? <div className={stule.messageError}>{inputError}</div> : <br/>}
         </div>

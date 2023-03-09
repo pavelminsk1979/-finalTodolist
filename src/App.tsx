@@ -99,7 +99,7 @@ function App() {
     return (
         <div className="App">
 
-            <CreateItemForm name={'NewTodolist'} callback={createTodolistHundler}/>
+            <CreateItemForm name={'Todolist'} callback={createTodolistHundler}/>
 
             {
                 todolists.map(todol => {

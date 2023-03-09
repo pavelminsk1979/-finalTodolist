@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import TextField from "@mui/material/TextField";
 
 type EditModeTitleType = {
     title: string
@@ -25,12 +26,15 @@ export const EditModeTitle = ({title, callback}: EditModeTitleType) => {
 
     return (
         editMode
-            ? <input
+            ? <TextField
+                color="error"
                 autoFocus
                 onBlur={inputOnBlurHundler}
                 value={editTitle}
                 onChange={inputOnChangeHundler}
-            />
+                label="EditText"
+                variant="standard" />
+
             : <span
                 onDoubleClick={spanOnDubleClickHundler}
             >{title}</span>
