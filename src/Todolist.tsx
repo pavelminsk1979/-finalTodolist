@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import CancelPresentation from "@mui/icons-material/CancelPresentation";
 import DeleteForever from "@mui/icons-material/DeleteForever";
+import Checkbox from "@mui/material/Checkbox";
 
 type TodolistType = {
     filter: FilterType
@@ -81,18 +82,20 @@ export const Todolist = ({
                 name={'Task'}
                 callback={createTaskHundler}/>
 
-            <ul>
+            <div>
                 {
                     filterTasks.map(e => {
                         return (
-                            <li className={e.isDone ? stule.completeTask : ''}
+                            <div className={e.isDone ? stule.completeTask : ''}
                                 key={e.id}>
-                                <input
+
+                                <Checkbox
+                                    checked={e.isDone}
                                     onChange={(event) => changeCheckboxTaskHundler(
                                         e.id, event.currentTarget.checked
                                     )}
-                                    type="checkbox"
-                                    checked={e.isDone}/>
+                                    color="success" />
+
                                 <EditModeTitle
                                     callback={(editTitle: string) => changeTitleTaskHundler(
                                         e.id, editTitle)}
@@ -106,11 +109,11 @@ export const Todolist = ({
                                 </IconButton>
 
 
-                            </li>
+                            </div>
                         )
                     })
                 }
-            </ul>
+            </div>
             <div>
                 <Button
                     color={'secondary'}

@@ -41,9 +41,12 @@ export const CreateItemForm = ({name,callback}: CreateItemFormType) => {
     return (
         <div>
             <TextField
+                error={!!inputError}/*для ошибки и красного Инпута если попытка ввода с пустым полем   это тоже самое что и  error={true} */
+               helperText={inputError} /*это отобразит текст который  внутри inputError
+                снизу рамки ИНПУТА если создание при пустом инпуте */
                 color="secondary"
                 focused
-                className={inputError ? stule.inputError : ''}
+               /* className={inputError ? stule.inputError : ''}*/
                 onKeyPress={onKeyPressCreateText}
                 onChange={onChangeCreateText}
                 value={text}
@@ -56,8 +59,6 @@ export const CreateItemForm = ({name,callback}: CreateItemFormType) => {
                 <PlusOne/>{name}
             </IconButton>
 
-
-            {inputError ? <div className={stule.messageError}>{inputError}</div> : <br/>}
         </div>
     )
 }

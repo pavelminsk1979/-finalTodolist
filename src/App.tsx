@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
-import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {CreateItemForm} from "./CreateItemForm";
+import PrimarySearchAppBar from "./AppBar";
+import Container from "@mui/material/Container";
+import  Paper from "@mui/material/Paper";
+import  Grid from "@mui/material/Grid";
 
 export type TaskType = {
     id: string
@@ -97,37 +100,45 @@ function App() {
 
 
     return (
-        <div className="App">
+        <div>
 
-            <CreateItemForm name={'Todolist'} callback={createTodolistHundler}/>
+            <PrimarySearchAppBar/>
+            <Container>
+                <Grid container style={{padding:'20px'}}>
+                <CreateItemForm name={'Todolist'} callback={createTodolistHundler}/>
+            </Grid>
+                <Grid container spacing={3}>
+                {
+                    todolists.map(todol => {
 
-            {
-                todolists.map(todol => {
+                        let filterTasks = tasks[todol.id]
+                        if (todol.filter === 'new') {
+                            filterTasks = filterTasks.filter(task => !task.isDone)
+                        } else if (todol.filter === 'completed') {
+                            filterTasks = filterTasks.filter(task => task.isDone)
+                        }
 
-                    let filterTasks = tasks[todol.id]
-                    if (todol.filter === 'new') {
-                        filterTasks = filterTasks.filter(task => !task.isDone)
-                    } else if (todol.filter === 'completed') {
-                        filterTasks = filterTasks.filter(task => task.isDone)
-                    }
-
-                    return (
-                        <Todolist
-                            changeTitleTask={changeTitleTask}
-                            changeTitleTodolist={changeTitleTodolist}
-                            deleteTodolist={deleteTodolist}
-                            key={todol.id}
-                            idTodolist={todol.id}
-                            filter={todol.filter}
-                            changeCheckboxTask={changeCheckboxTask}
-                            createTask={createTask}
-                            filterTodolist={filterTodolist}
-                            deleteTask={deleteTask}
-                            filterTasks={filterTasks}
-                            title={todol.title}/>
-                    )
-                })
-            }
+                        return <Grid item>
+                            <Paper style={{padding:'10px'}}>
+                            <Todolist
+                                changeTitleTask={changeTitleTask}
+                                changeTitleTodolist={changeTitleTodolist}
+                                deleteTodolist={deleteTodolist}
+                                key={todol.id}
+                                idTodolist={todol.id}
+                                filter={todol.filter}
+                                changeCheckboxTask={changeCheckboxTask}
+                                createTask={createTask}
+                                filterTodolist={filterTodolist}
+                                deleteTask={deleteTask}
+                                filterTasks={filterTasks}
+                                title={todol.title}/>
+                        </Paper>
+                        </Grid>
+                    })
+                }
+        </Grid>
+            </Container>
         </div>
     );
 }
