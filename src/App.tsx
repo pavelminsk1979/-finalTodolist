@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {CreateItemForm} from "./CreateItemForm";
@@ -6,6 +6,7 @@ import PrimarySearchAppBar from "./AppBar";
 import Container from "@mui/material/Container";
 import  Paper from "@mui/material/Paper";
 import  Grid from "@mui/material/Grid";
+import {changeCheckboxTaskAC, changeTitleTaskAC, createTaskAC, deleteTaskAC, TasksReducer} from "./state/TasksReducer";
 
 export type TaskType = {
     id: string
@@ -36,7 +37,7 @@ function App() {
 
     ])
 
-    const [tasks, setTasks] = useState<StateTaskType>({
+    const [tasks, dispatchTasks] = useReducer(TasksReducer,{
         [todolistId1]: [
             {id: v1(), title: 'REACT', isDone: true},
             {id: v1(), title: 'ANGULAR', isDone: false},
@@ -51,41 +52,39 @@ function App() {
     })
 
     const changeTitleTask = (idTodolist: string, idTask: string, editTitle: string) => {
-        setTasks({
-            ...tasks, [idTodolist]: tasks[idTodolist].map(
-                e => e.id === idTask ? {...e, title: editTitle} : e)
-        })
+        dispatchTasks(changeTitleTaskAC(idTodolist,idTask,editTitle))
     }
+
+
+    const createTask = (idTodolist: string, text: string) => {
+        dispatchTasks(createTaskAC(idTodolist,text))
+    }
+
+    const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
+        dispatchTasks(changeCheckboxTaskAC(idTodolist,idTask,valueCheckbox))
+    }
+
+    const deleteTask = (idTodolist: string, idTask: string) => {
+        dispatchTasks(deleteTaskAC(idTodolist,idTask))
+    }
+
+
+
+
+
+
+
 
     const changeTitleTodolist = (idTodolist: string, editTitle: string) => {
         setTodolists(todolists.map(e => e.id === idTodolist ? {...e, title: editTitle} : e))
     }
 
-    const createTodolistHundler = (text: string) => {
+    const createTodolist = (text: string) => {
         const newTodolistId = v1()
         setTodolists([{
             id: newTodolistId, title: text, filter: 'all'
         }, ...todolists])
-        setTasks({[newTodolistId]: [], ...tasks})
-    }
-
-    const createTask = (idTodolist: string, text: string) => {
-        setTasks({
-            ...tasks, [idTodolist]: [
-                {id: v1(), title: text, isDone: false}, ...tasks[idTodolist]
-            ]
-        })
-    }
-
-    const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
-        setTasks({
-            ...tasks, [idTodolist]: tasks[idTodolist].map(
-                e => e.id === idTask ? {...e, isDone: valueCheckbox} : e)
-        })
-    }
-
-    const deleteTask = (idTodolist: string, idTask: string) => {
-        setTasks({...tasks, [idTodolist]: tasks[idTodolist].filter(el => el.id !== idTask)})
+        /*setTasks({[newTodolistId]: [], ...tasks})*/
     }
 
     const filterTodolist = (idTodolist: string, valueFilter: FilterType) => {
@@ -95,7 +94,7 @@ function App() {
     const deleteTodolist = (idTodolist: string) => {
         setTodolists(todolists.filter(e => e.id !== idTodolist))
         delete tasks[idTodolist]
-        setTasks({...tasks})
+        /*setTasks({...tasks})*/
     }
 
 
@@ -105,7 +104,7 @@ function App() {
             <PrimarySearchAppBar/>
             <Container>
                 <Grid container style={{padding:'20px'}}>
-                <CreateItemForm name={'Todolist'} callback={createTodolistHundler}/>
+                <CreateItemForm name={'Todolist'} callback={createTodolist}/>
             </Grid>
                 <Grid container spacing={3}>
                 {
