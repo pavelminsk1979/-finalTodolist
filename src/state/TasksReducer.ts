@@ -23,7 +23,7 @@ export const TasksReducer = (state: StateTaskType, action: ActionTaskType): Stat
         case "Task/CREATE-TASK": {
             return {
                 ...state, [action.idTodolist]: [
-                    {id: v1(), title: 'ОПАЧКИ и -' + action.text, isDone: false}, ...state[action.idTodolist]]
+                    {id: v1(), title:  action.text, isDone: false}, ...state[action.idTodolist]]
             }
         }
 
@@ -54,6 +54,8 @@ export const TasksReducer = (state: StateTaskType, action: ActionTaskType): Stat
             return state
     }
 }
+
+
 
 type deleteTaskACType = ReturnType<typeof deleteTaskAC>
 export const deleteTaskAC = (idTodolist: string, idTask: string) => {
