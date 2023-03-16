@@ -11,7 +11,9 @@ type ActionTaskType =
     | createTodolistACType
     | deleteTodolistACType
 
-export const TasksReducer = (state: StateTaskType, action: ActionTaskType): StateTaskType => {
+const initialTaskState:StateTaskType={}
+
+export const TasksReducer = (state: StateTaskType=initialTaskState, action: ActionTaskType): StateTaskType => {
     switch (action.type) {
         case 'Task/CHANGE-TITLE' : {
             return {

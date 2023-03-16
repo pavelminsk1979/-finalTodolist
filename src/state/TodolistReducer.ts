@@ -4,7 +4,10 @@ import {v1} from "uuid";
 
 type ActionTodolistType = changeTitleTodolistACType | createTodolistACType | filterTodolistACType | deleteTodolistACType
 
-export const TodolistReducer = (state: StateTodolistType[], action: ActionTodolistType): StateTodolistType[] => {
+const initialTodolState:StateTodolistType[]=[]
+
+export const TodolistReducer = (
+    state: StateTodolistType[]=initialTodolState, action: ActionTodolistType): StateTodolistType[] => {
     switch (action.type) {
         case 'Todolist/CHANGE-TITLE': {
             return state.map(e => e.id === action.idTodolist ? {...e, title: action.editTitle} : e)
