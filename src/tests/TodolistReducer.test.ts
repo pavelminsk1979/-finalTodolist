@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {StateTodolistType} from "../App";
+import {StateTodolistType} from "../Components/App";
 import {
     changeTitleTodolistAC,
     createTodolistAC,

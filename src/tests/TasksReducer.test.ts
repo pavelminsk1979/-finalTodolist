@@ -1,5 +1,5 @@
 
-import {StateTaskType} from "../App";
+import {StateTaskType} from "../Components/App";
 import {changeCheckboxTaskAC, changeTitleTaskAC, createTaskAC, deleteTaskAC, TasksReducer} from "../state/TasksReducer";
 
 

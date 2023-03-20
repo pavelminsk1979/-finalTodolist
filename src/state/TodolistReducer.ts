@@ -1,4 +1,4 @@
-import {FilterType, StateTodolistType} from "../App";
+import {FilterType, StateTodolistType} from "../Components/App";
 import {v1} from "uuid";
 
 

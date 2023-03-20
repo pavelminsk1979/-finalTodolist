@@ -1,5 +1,5 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import stule from "./Todolist.module.css";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
+
 import IconButton from "@mui/material/IconButton";
 import PlusOne from "@mui/icons-material/PlusOne";
 import TextField from "@mui/material/TextField";
@@ -10,7 +10,7 @@ type CreateItemFormType = {
 }
 
 
-export const CreateItemForm = ({name,callback}: CreateItemFormType) => {
+export const CreateItemForm =memo( ({name,callback}: CreateItemFormType) => {
 
     const [text, setText] = useState('')
     const [inputError, setInputError] = useState<string | null>(null)
@@ -61,4 +61,4 @@ export const CreateItemForm = ({name,callback}: CreateItemFormType) => {
 
         </div>
     )
-}
+})

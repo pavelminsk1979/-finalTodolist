@@ -1,18 +1,15 @@
-import React from "react";
-import {FilterType, TaskType} from "./App";
-import stule from "./Todolist.module.css";
+import React, {useCallback} from "react";
+import {FilterType, StateTaskType, StateTodolistType} from "./App";
 import {CreateItemForm} from "./CreateItemForm";
 import {EditModeTitle} from "./EditModeTitle";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
-import CancelPresentation from "@mui/icons-material/CancelPresentation";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import Checkbox from "@mui/material/Checkbox";
+import {Task} from "./Task";
 
 type TodolistType = {
     filter: FilterType
     title: string
-    filterTasks: TaskType[]
     deleteTask: (idTodolist: string, idTask: string) => void
     changeTitleTodolist: (idTodolist: string, editTitle: string) => void
     changeTitleTask: (idTodolist: string, idTask: string, editTitle: string) => void
@@ -20,47 +17,55 @@ type TodolistType = {
     changeCheckboxTask: (idTodolist: string, idTask: string, valueCheckbox: boolean) => void
     filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
     createTask: (idTodolist: string, text: string) => void
-    idTodolist: string
+    todolist: StateTodolistType
+    tasks: StateTaskType
 }
 
 export const Todolist = ({
                              title,
-                             filterTasks,
+                             tasks,
                              deleteTask,
                              filterTodolist,
                              createTask,
                              changeCheckboxTask,
                              filter,
-                             idTodolist, deleteTodolist, changeTitleTodolist, changeTitleTask
+                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask
                          }: TodolistType) => {
 
 
     const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
-        changeCheckboxTask(idTodolist, idTask, valueCheckbox)
+        changeCheckboxTask(todolist.id, idTask, valueCheckbox)
     }
 
-    const createTaskHundler = (text: string) => {
-        createTask(idTodolist, text)
-    }
+    const createTaskHundler = useCallback((text: string) => {
+        createTask(todolist.id, text)
+    }, [])
 
-    const onClickDeleteTask = (idTask: string) => {
-        deleteTask(idTodolist, idTask)
+    const deleteTaskHandler = (idTask: string) => {
+        deleteTask(todolist.id, idTask)
     }
 
     const onClickFiltrTodolist = (valueFilter: FilterType) => {
-        filterTodolist(idTodolist, valueFilter)
+        filterTodolist(todolist.id, valueFilter)
     }
 
     const deleteTodolistHundler = () => {
-        deleteTodolist(idTodolist)
+        deleteTodolist(todolist.id)
     }
 
     const changeTitleTodolistHundler = (editTitle: string) => {
-        changeTitleTodolist(idTodolist, editTitle)
+        changeTitleTodolist(todolist.id, editTitle)
     }
 
     const changeTitleTaskHundler = (idTask: string, editTitle: string) => {
-        changeTitleTask(idTodolist, idTask, editTitle)
+        changeTitleTask(todolist.id, idTask, editTitle)
+    }
+
+    let filterTasks = tasks[todolist.id]
+    if (todolist.filter === 'new') {
+        filterTasks = filterTasks.filter(task => !task.isDone)
+    } else if (todolist.filter === 'completed') {
+        filterTasks = filterTasks.filter(task => task.isDone)
     }
 
     return (
@@ -84,32 +89,14 @@ export const Todolist = ({
 
             <div>
                 {
-                    filterTasks.map(e => {
+                    filterTasks.map(aloneTask => {
                         return (
-                            <div className={e.isDone ? stule.completeTask : ''}
-                                key={e.id}>
-
-                                <Checkbox
-                                    checked={e.isDone}
-                                    onChange={(event) => changeCheckboxTaskHundler(
-                                        e.id, event.currentTarget.checked
-                                    )}
-                                    color="success" />
-
-                                <EditModeTitle
-                                    callback={(editTitle: string) => changeTitleTaskHundler(
-                                        e.id, editTitle)}
-                                    title={e.title}/>
-
-                                <IconButton
-                                    size={"small"}
-                                    onClick={
-                                    () => onClickDeleteTask(e.id)}>
-                                    <CancelPresentation/>
-                                </IconButton>
-
-
-                            </div>
+                            <Task
+                                callbackDel={deleteTaskHandler}
+                                callbackChangeTitle={changeTitleTaskHundler}
+                                callbackCheckbox={changeCheckboxTaskHundler}
+                                task={aloneTask}
+                                key={aloneTask.id}/>
                         )
                     })
                 }
