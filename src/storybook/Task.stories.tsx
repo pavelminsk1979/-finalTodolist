@@ -7,15 +7,22 @@ import {Task} from "../Components/Task";
 export default {
     title: 'Todolist Project/Task',
     component:Task ,
+    args:{
+        callbackDel:action('DeleteTask'),
+        callbackCheckbox:action('ChangeCheckboxTask'),
+        callbackChangeTitle:action('ChangeTitleTask')
+    }
 } as ComponentMeta<typeof Task>;
 
 
 const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
 
-export const TaskStory = Template.bind({});
-TaskStory.args = {
+export const TaskStoryIsDoneTrue = Template.bind({});
+TaskStoryIsDoneTrue.args = {
     task: {id:'1',title:"I'm MAIN Title",isDone:true},
-    callbackDel:action('DeleteTask'),
-        callbackCheckbox:action('ChangeCheckboxTask'),
-    callbackChangeTitle:action('ChangeTitleTask')
+};
+
+export const TaskStoryIsDoneFalse = Template.bind({});
+TaskStoryIsDoneFalse.args = {
+    task: {id:'2',title:"I'm small and little title",isDone:false},
 };
