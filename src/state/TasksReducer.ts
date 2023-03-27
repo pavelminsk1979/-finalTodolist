@@ -3,7 +3,7 @@ import {v1} from "uuid";
 import {createTodolistACType, deleteTodolistACType} from "./TodolistReducer";
 
 
-type ActionTaskType =
+export type ActionTaskType =
     changeTitleTaskACType
     | createTaskACType
     | changeCheckboxTaskACType

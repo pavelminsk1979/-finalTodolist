@@ -1,25 +1,31 @@
-import {FilterType, StateTodolistType} from "../Components/App";
+
 import {v1} from "uuid";
+import {Dispatch} from "redux";
+import {todolistApi} from "../api/api";
+import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
 
 
-type ActionTodolistType = changeTitleTodolistACType | createTodolistACType | filterTodolistACType | deleteTodolistACType
+export type ActionTodolistType = changeTitleTodolistACType | createTodolistACType | filterTodolistACType | deleteTodolistACType |setTodolistsACType
 
-const initialTodolState:StateTodolistType[]=[]
+const initialTodolState:CommonTodolistType[]=[]
 
 export const TodolistReducer = (
-    state: StateTodolistType[]=initialTodolState, action: ActionTodolistType): StateTodolistType[] => {
+    state: CommonTodolistType[]=initialTodolState, action: ActionTodolistType): CommonTodolistType[] => {
     switch (action.type) {
         case 'Todolist/CHANGE-TITLE': {
             return state.map(e => e.id === action.idTodolist ? {...e, title: action.editTitle} : e)
         }
         case "Todolist/CREATE-TODOLIST": {
-            return [{id: action.idTodolist, title: action.text, filter: 'all'}, ...state]
+            return [{id: action.idTodolist, title: action.text, filter: 'all',addedData: '', order: 0}, ...state]
         }
         case "Todolist/CHANGE-FILTER-VALUE": {
             return state.map(e => e.id === action.idTodolist ? {...e, filter: action.valueFilter} : e)
         }
         case "Todolist/DELETE-TODOLIST": {
             return state.filter(e => e.id !== action.idTodolist)
+        }
+        case "Todolist/SET-TODOLISTS": {
+            return  action.todolists.map(e=>({...e,filter:'all'}))
         }
 
         default :
@@ -62,4 +68,21 @@ export const changeTitleTodolistAC = (idTodolist: string, editTitle: string) => 
         idTodolist,
         editTitle
     } as const
+}
+
+type setTodolistsACType = ReturnType<typeof setTodolistsAC>
+export const setTodolistsAC = (todolists:TodolistType[]) => {
+    return {
+        type: 'Todolist/SET-TODOLISTS',
+        todolists
+    } as const
+}
+
+
+
+export const setTodolists = () => (dispatch:Dispatch) => {
+    todolistApi.getTodolists()
+        .then((respons) => {
+            dispatch(setTodolistsAC(respons.data))
+        })
 }
