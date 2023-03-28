@@ -1,6 +1,6 @@
 import {StateTaskType} from "../Components/App";
 import {v1} from "uuid";
-import {createTodolistACType, deleteTodolistACType} from "./TodolistReducer";
+import {createTodolistACType, deleteTodolistACType, setTodolistsACType} from "./TodolistReducer";
 
 
 export type ActionTaskType =
@@ -10,10 +10,11 @@ export type ActionTaskType =
     | deleteTaskACType
     | createTodolistACType
     | deleteTodolistACType
+    | setTodolistsACType
 
-const initialTaskState:StateTaskType={}
+const initialTaskState: StateTaskType = {}
 
-export const TasksReducer = (state: StateTaskType=initialTaskState, action: ActionTaskType): StateTaskType => {
+export const TasksReducer = (state: StateTaskType = initialTaskState, action: ActionTaskType): StateTaskType => {
     switch (action.type) {
         case 'Task/CHANGE-TITLE' : {
             return {
@@ -25,7 +26,7 @@ export const TasksReducer = (state: StateTaskType=initialTaskState, action: Acti
         case "Task/CREATE-TASK": {
             return {
                 ...state, [action.idTodolist]: [
-                    {id: v1(), title:  action.text, isDone: false}, ...state[action.idTodolist]]
+                    {id: v1(), title: action.text, isDone: false}, ...state[action.idTodolist]]
             }
         }
 
@@ -51,12 +52,16 @@ export const TasksReducer = (state: StateTaskType=initialTaskState, action: Acti
             delete state[action.idTodolist]
             return {...state}
         }
+        case "Todolist/SET-TODOLISTS":{
+            let newState = {...state}
+           action.todolists.map(todol=>{return newState[todol.id]=[]})
+            return newState
+        }
 
         default:
             return state
     }
 }
-
 
 
 type deleteTaskACType = ReturnType<typeof deleteTaskAC>

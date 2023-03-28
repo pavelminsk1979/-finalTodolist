@@ -1,11 +1,12 @@
 import React, {useCallback} from "react";
-import {FilterType, StateTaskType, StateTodolistType} from "./App";
+import { StateTaskType} from "./App";
 import {CreateItemForm} from "./CreateItemForm";
 import {EditModeTitle} from "./EditModeTitle";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "./Task";
+import {CommonTodolistType, FilterType} from "../common/types";
 
 type TodolistType = {
     filter: FilterType
@@ -17,7 +18,7 @@ type TodolistType = {
     changeCheckboxTask: (idTodolist: string, idTask: string, valueCheckbox: boolean) => void
     filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
     createTask: (idTodolist: string, text: string) => void
-    todolist: StateTodolistType
+    todolist: CommonTodolistType
     tasks: StateTaskType
 }
 

@@ -1,11 +1,12 @@
-import {StateTaskType, StateTodolistType} from "../Components/App";
+import {StateTaskType} from "../Components/App";
 import {createTodolistAC, deleteTodolistAC, TodolistReducer} from "../state/TodolistReducer";
 import {TasksReducer} from "../state/TasksReducer";
+import {CommonTodolistType} from "../common/types";
 
 
 test('should be added todolist and added array task',()=>{
     const startTaskState: StateTaskType = {}
-    const startTodolistState:  StateTodolistType[] = []
+    const startTodolistState:  CommonTodolistType[] = []
 
     const action = createTodolistAC("I'm New Todol")
     const endTodolistState = TodolistReducer(startTodolistState,action)
@@ -48,9 +49,9 @@ test('correct property with tasks should be delete when delete todolist', ()=>{
          ],
      }
 
-    const startTodolistState:  StateTodolistType[] = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to watch', filter: 'all'},
+    const startTodolistState:  CommonTodolistType[] = [
+        {id: 'todolistId1', title: 'What to learn', filter: 'all',addedData: '', order: 0},
+        {id: 'todolistId2', title: 'What to watch', filter: 'all',addedData: '', order: 0},
     ]
 
     const action = deleteTodolistAC('todolistId2')

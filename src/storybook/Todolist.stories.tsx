@@ -22,7 +22,7 @@ TodolistStory.args = {
     createTask : action('createTask'),
     filter:'all',
     title:"I'm importatnt todolist",
-    todolist:{id:'11',title:"I'm importatnt todolist",filter:'all'},
+    todolist:{id:'11',title:"I'm importatnt todolist",filter:'all',addedData: '', order: 0},
     tasks:{
     ['11']:[
         {id:'1',title:"I'm MAIN Title",isDone:true},

@@ -1,4 +1,4 @@
-import {combineReducers, createStore, legacy_createStore} from "redux";
+import {combineReducers, legacy_createStore} from "redux";
 import {TodolistReducer} from "../../state/TodolistReducer";
 import {TasksReducer} from "../../state/TasksReducer";
 import {StateStoreType} from "../../state/store";
@@ -12,8 +12,8 @@ const rootReducer = combineReducers({
 
 const initialGlobalState = {
     todolists:[
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to watch', filter: 'all'},
+        {id: 'todolistId1', title: 'What to learn', filter: 'all',addedData: '', order: 0},
+        {id: 'todolistId2', title: 'What to watch', filter: 'all',addedData: '', order: 0},
     ],
     tasks:{
         'todolistId1': [
