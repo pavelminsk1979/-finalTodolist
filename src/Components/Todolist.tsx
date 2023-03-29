@@ -1,12 +1,13 @@
-import React, {useCallback} from "react";
-import { StateTaskType} from "./App";
+import React, {useCallback, useEffect} from "react";
 import {CreateItemForm} from "./CreateItemForm";
 import {EditModeTitle} from "./EditModeTitle";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "./Task";
-import {CommonTodolistType, FilterType} from "../common/types";
+import {CommonTodolistType, FilterType, TaskStatus} from "../common/types";
+import {useAppDispatch} from "../state/store";
+import {setTasks, StateTaskType} from "../state/TasksReducer";
 
 type TodolistType = {
     filter: FilterType
@@ -33,6 +34,11 @@ export const Todolist = ({
                              todolist, deleteTodolist, changeTitleTodolist, changeTitleTask
                          }: TodolistType) => {
 
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        dispatch(setTasks(todolist.id))
+    },[])
 
     const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
         changeCheckboxTask(todolist.id, idTask, valueCheckbox)
@@ -64,10 +70,13 @@ export const Todolist = ({
 
     let filterTasks = tasks[todolist.id]
     if (todolist.filter === 'new') {
-        filterTasks = filterTasks.filter(task => !task.isDone)
+        filterTasks = filterTasks.filter(
+            task => task.status===TaskStatus.Complete)
     } else if (todolist.filter === 'completed') {
-        filterTasks = filterTasks.filter(task => task.isDone)
+        filterTasks = filterTasks.filter(
+            task => task.status===TaskStatus.New)
     }
+
 
     return (
         <div>

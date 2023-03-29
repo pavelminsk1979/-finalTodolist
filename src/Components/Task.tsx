@@ -4,7 +4,7 @@ import Checkbox from "@mui/material/Checkbox";
 import {EditModeTitle} from "./EditModeTitle";
 import IconButton from "@mui/material/IconButton";
 import CancelPresentation from "@mui/icons-material/CancelPresentation";
-import {TaskType} from "./App";
+import {TaskStatus, TaskType} from "../common/types";
 
 
 type TaskComponentType = {
@@ -30,11 +30,11 @@ export const Task = (
     }
 
   return(
-      <div className={task.isDone ? stule.completeTask : ''}
+      <div className={task.status===TaskStatus.Complete ? stule.completeTask : ''}
            key={task.id}>
 
           <Checkbox
-              checked={task.isDone}
+              checked={task.status===TaskStatus.Complete}
               onChange={(event) => changeCheckboxTaskHundler(
                   task.id, event.currentTarget.checked
               )}

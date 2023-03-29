@@ -20,11 +20,18 @@ export type AxiosGetTaskType = {
     error:string
 }
 
+export enum TaskStatus{
+    New=0,
+    inProgress=1,
+    Complete=2,
+    Draft=3
+}
+
 export type TaskType = {
     description:string,
     title:string,
-    completed:boolean,
-    status:number,
+    /*completed:boolean,*/
+    status:TaskStatus,
     priority:number,
     startDate:string,
     deadline:string,

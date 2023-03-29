@@ -2,6 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import {action} from "@storybook/addon-actions";
 import {Todolist} from "../Components/Todolist";
+import {TaskStatus} from "../common/types";
 
 export default {
     title: 'Todolist Project/Todolist',
@@ -25,8 +26,10 @@ TodolistStory.args = {
     todolist:{id:'11',title:"I'm importatnt todolist",filter:'all',addedData: '', order: 0},
     tasks:{
     ['11']:[
-        {id:'1',title:"I'm MAIN Title",isDone:true},
-        {id:'2',title:"I'm small and little title",isDone:false}
+        {id:'1',title:"I'm MAIN Title",status:TaskStatus.Complete, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+            addedDate:'',order:0, priority:1},
+        {id:'2',title:"I'm small and little title",status:TaskStatus.New, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+            addedDate:'',order:0, priority:1}
     ]
 }
 };

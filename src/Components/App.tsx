@@ -5,7 +5,13 @@ import PrimarySearchAppBar from "./AppBar";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import {changeCheckboxTaskAC, changeTitleTaskAC, createTaskAC, deleteTaskAC} from "../state/TasksReducer";
+import {
+    changeCheckboxTaskAC,
+    changeTitleTaskAC,
+    createTaskAC,
+    deleteTaskAC,
+    StateTaskType
+} from "../state/TasksReducer";
 import {
     changeTitleTodolistAC,
     createTodolistAC, deleteTodolistAC,
@@ -16,15 +22,6 @@ import {StateStoreType, useAppDispatch} from "../state/store";
 import {CommonTodolistType, FilterType} from "../common/types";
 
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-
-export type StateTaskType = {
-    [key: string]: TaskType[]
-}
 
 function App() {
 

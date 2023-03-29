@@ -1,6 +1,8 @@
-import {StateTaskType} from "../Components/App";
-import {v1} from "uuid";
+
 import {createTodolistACType, deleteTodolistACType, setTodolistsACType} from "./TodolistReducer";
+import {Dispatch} from "redux";
+import {taskApi} from "../api/api";
+import {TaskType} from "../common/types";
 
 
 export type ActionTaskType =
@@ -11,24 +13,62 @@ export type ActionTaskType =
     | createTodolistACType
     | deleteTodolistACType
     | setTodolistsACType
+    | setTaskACType
+
+export type StateTaskType = {
+    [key: string]: TaskType[]
+}
 
 const initialTaskState: StateTaskType = {}
 
 export const TasksReducer = (state: StateTaskType = initialTaskState, action: ActionTaskType): StateTaskType => {
     switch (action.type) {
+        case "Task/SET-TASKS":{
+            let copyStateTasks = {...state}
+            copyStateTasks[action.idTodolist]=action.tasks
+            return copyStateTasks
+        }
+
         case 'Task/CHANGE-TITLE' : {
             return {
                 ...state, [action.idTodolist]: state[action.idTodolist].map(
                     e => e.id === action.idTask ? {...e, title: action.editTitle} : e)
             }
         }
-
-        case "Task/CREATE-TASK": {
+/*        case "Task/CREATE-TASK": {
             return {
                 ...state, [action.idTodolist]: [
-                    {id: v1(), title: action.text, isDone: false}, ...state[action.idTodolist]]
+                    {description: '',
+                        title: action.title,
+                        status: TaskStatus.New,
+                        priority: 0,
+                        startDate: '',
+                        deadline: '',
+                        id: action.taskId,
+                        todoListId: action.todolId,
+                        order: 0,
+                        addedDate: ''
+                    }, ...state[action.todolId]
+                ]
             }
-        }
+        }*/
+/*        case "Task/CREATE-TASK": {
+            return {
+                ...state, [action.idTodolist]: [
+                    { description: '',
+                        title: '',
+                        status: TaskStatus.New,
+                        priority: 0,
+                        startDate: '',
+                        deadline: '',
+                        id: action.taskId,
+                        todoListId: action.todolId,
+                        order: 0,
+                        addedDate: ''
+                    }, ...state[action.idTodolist]
+                ]
+            }
+        }*/
 
         case "Task/CHANGE-CHECKBOX": {
             return {
@@ -52,9 +92,11 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
             delete state[action.idTodolist]
             return {...state}
         }
-        case "Todolist/SET-TODOLISTS":{
+        case "Todolist/SET-TODOLISTS": {
             let newState = {...state}
-           action.todolists.map(todol=>{return newState[todol.id]=[]})
+            action.todolists.map(todol => {
+                return newState[todol.id] = []
+            })
             return newState
         }
 
@@ -102,4 +144,22 @@ export const changeTitleTaskAC = (idTodolist: string, idTask: string, editTitle:
         idTask,
         editTitle,
     } as const
+}
+
+type setTaskACType = ReturnType<typeof setTaskAC>
+export const setTaskAC = (idTodolist: string, tasks:TaskType[]) => {
+    return {
+        type: 'Task/SET-TASKS',
+        idTodolist,
+        tasks,
+    } as const
+}
+
+
+export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
+    taskApi.getTasks(todolistId)
+        .then ((respons)=>{
+            dispatch(setTaskAC(todolistId,respons.data.items))
+    })
+
 }

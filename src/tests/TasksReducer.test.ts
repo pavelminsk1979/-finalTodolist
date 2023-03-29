@@ -1,6 +1,14 @@
 
-import {StateTaskType} from "../Components/App";
-import {changeCheckboxTaskAC, changeTitleTaskAC, createTaskAC, deleteTaskAC, TasksReducer} from "../state/TasksReducer";
+
+import {
+    changeCheckboxTaskAC,
+    changeTitleTaskAC,
+    createTaskAC,
+    deleteTaskAC,
+    StateTaskType,
+    TasksReducer
+} from "../state/TasksReducer";
+import {TaskStatus} from "../common/types";
 
 
 let startState : StateTaskType
@@ -8,15 +16,22 @@ let startState : StateTaskType
     beforeEach(()=>{
         startState = {
             'todolistId1': [
-                {id: '1', title: 'REACT', isDone: true},
-                {id: '2', title: 'ANGULAR', isDone: false},
-                {id: '3', title: 'HTML&CSS', isDone: true},
-                {id: '4', title: 'English', isDone: false},
+                {id: '1', title: 'REACT',status:TaskStatus.Complete, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
+                {id: '2', title: 'ANGULAR',status:TaskStatus.New, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
+                {id: '3', title: 'HTML&CSS',status:TaskStatus.Complete, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
+                {id: '4', title: 'English',status:TaskStatus.New, todoListId:'todolistId1',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
             ],
             'todolistId2': [
-                {id: '5', title: 'Rembo1', isDone: true},
-                {id: '6', title: 'YouTube', isDone: false},
-                {id: '7', title: 'Avatar', isDone: true}
+                {id: '5', title: 'Rembo1', status:TaskStatus.Complete, todoListId:'todolistId2',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
+                {id: '6', title: 'YouTube', status:TaskStatus.New, todoListId:'todolistId2',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1},
+                {id: '7', title: 'Avatar', status:TaskStatus.Complete, todoListId:'todolistId2',description:'',startDate:'',deadline:'',
+                    addedDate:'',order:0, priority:1}
             ],
         }
 })
@@ -38,9 +53,9 @@ test ('correct task should be change Checkbox',()=>{
         startState,changeCheckboxTaskAC(
             'todolistId1','2',true))
 
-    expect(endState['todolistId1'][0].isDone).toBe(true)
-    expect(endState['todolistId1'][1].isDone).toBe(true)
-    expect(endState['todolistId1'][2].isDone).toBe(true)
+    expect(endState['todolistId1'][0].status).toBe(TaskStatus.Complete)
+    expect(endState['todolistId1'][1].status).toBe(TaskStatus.Complete)
+    expect(endState['todolistId1'][2].status).toBe(TaskStatus.Complete)
 })
 
 
