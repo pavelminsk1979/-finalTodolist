@@ -8,7 +8,7 @@ test('should be added todolist and added array task',()=>{
     const startTaskState: StateTaskType = {}
     const startTodolistState:  CommonTodolistType[] = []
 
-    const action = createTodolistAC("I'm New Todol")
+    const action = createTodolistAC('todolist3',"I'm New Todol")
     const endTodolistState = TodolistReducer(startTodolistState,action)
     const endTaskState = TasksReducer(startTaskState,action)
 

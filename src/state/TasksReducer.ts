@@ -2,7 +2,7 @@
 import {createTodolistACType, deleteTodolistACType, setTodolistsACType} from "./TodolistReducer";
 import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
-import {TaskType} from "../common/types";
+import {TaskStatus, TaskType} from "../common/types";
 
 
 export type ActionTaskType =
@@ -35,40 +35,23 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
                     e => e.id === action.idTask ? {...e, title: action.editTitle} : e)
             }
         }
-/*        case "Task/CREATE-TASK": {
+        case "Task/CREATE-TASK": {
             return {
                 ...state, [action.idTodolist]: [
                     {description: '',
-                        title: action.title,
+                        title: action.text,
                         status: TaskStatus.New,
                         priority: 0,
                         startDate: '',
                         deadline: '',
-                        id: action.taskId,
-                        todoListId: action.todolId,
-                        order: 0,
-                        addedDate: ''
-                    }, ...state[action.todolId]
-                ]
-            }
-        }*/
-/*        case "Task/CREATE-TASK": {
-            return {
-                ...state, [action.idTodolist]: [
-                    { description: '',
-                        title: '',
-                        status: TaskStatus.New,
-                        priority: 0,
-                        startDate: '',
-                        deadline: '',
-                        id: action.taskId,
-                        todoListId: action.todolId,
+                        id: action.idTask,
+                        todoListId: action.idTodolist,
                         order: 0,
                         addedDate: ''
                     }, ...state[action.idTodolist]
                 ]
             }
-        }*/
+        }
 
         case "Task/CHANGE-CHECKBOX": {
             return {
@@ -128,11 +111,12 @@ export const changeCheckboxTaskAC = (idTodolist: string, idTask: string, valueCh
 
 
 type createTaskACType = ReturnType<typeof createTaskAC>
-export const createTaskAC = (idTodolist: string, text: string) => {
+export const createTaskAC = (idTodolist: string, text: string,idTask:string) => {
     return {
         type: 'Task/CREATE-TASK',
         idTodolist,
-        text
+        text,
+        idTask
     } as const
 }
 
@@ -156,10 +140,29 @@ export const setTaskAC = (idTodolist: string, tasks:TaskType[]) => {
 }
 
 
+
+
+export const createTaskTC = (idTodolist: string, text: string) => (
+    dispatch: Dispatch) => {
+    taskApi.createTask(idTodolist, text)
+        .then ((respons)=>{
+            dispatch(createTaskAC(idTodolist,text,respons.data.data.item.id))
+        })
+}
+
+
+export const deleteTaskTC = (idTodolist: string, idTask: string) => (
+    dispatch: Dispatch) => {
+    taskApi.deleteTask(idTodolist, idTask)
+        .then ((respons)=>{
+            dispatch(deleteTaskAC(idTodolist,idTask))
+        })
+}
+
+
 export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
     taskApi.getTasks(todolistId)
         .then ((respons)=>{
             dispatch(setTaskAC(todolistId,respons.data.items))
     })
-
 }

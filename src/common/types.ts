@@ -10,6 +10,7 @@ export type PayloadTaskType = {
 
 export type AxiosTaskType<T={}> = {
     messages:string[]
+    fieldsErrors:string[]
     resultCode:number
     data:T
 }
@@ -30,7 +31,6 @@ export enum TaskStatus{
 export type TaskType = {
     description:string,
     title:string,
-    /*completed:boolean,*/
     status:TaskStatus,
     priority:number,
     startDate:string,

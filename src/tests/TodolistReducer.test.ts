@@ -35,7 +35,7 @@ test('correct todolist should be change valueFilter', () => {
 
 test('should be created new todolis', () => {
     const newTitleForNewTodolist = "I'm New Todolist"
-    const endState = TodolistReducer(startState, createTodolistAC(newTitleForNewTodolist))
+    const endState = TodolistReducer(startState, createTodolistAC('todolist3',newTitleForNewTodolist))
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe("I'm New Todolist")

@@ -8,13 +8,13 @@ import Grid from "@mui/material/Grid";
 import {
     changeCheckboxTaskAC,
     changeTitleTaskAC,
-    createTaskAC,
-    deleteTaskAC,
+     createTaskTC,
+     deleteTaskTC,
     StateTaskType
 } from "../state/TasksReducer";
 import {
     changeTitleTodolistAC,
-    createTodolistAC, deleteTodolistAC,
+    createTodolistTC, deleteTodolistAC, deleteTodolistTC,
     filterTodolistAC, setTodolists
 } from "../state/TodolistReducer";
 import {useSelector} from "react-redux";
@@ -43,7 +43,7 @@ function App() {
     }
 
     const deleteTodolist = (idTodolist: string) => {
-        dispatch(deleteTodolistAC(idTodolist))
+        dispatch(deleteTodolistTC(idTodolist))
     }
 
 
@@ -52,7 +52,7 @@ function App() {
     }
 
     const createTodolist = useCallback((text: string) => {
-        dispatch(createTodolistAC(text))
+        dispatch(createTodolistTC(text))
     }, [])
 
 
@@ -62,7 +62,7 @@ function App() {
 
 
     const createTask = (idTodolist: string, text: string) => {
-        dispatch(createTaskAC(idTodolist, text))
+        dispatch(createTaskTC(idTodolist, text))
     }
 
     const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
@@ -70,7 +70,7 @@ function App() {
     }
 
     const deleteTask = (idTodolist: string, idTask: string) => {
-        dispatch(deleteTaskAC(idTodolist, idTask))
+        dispatch(deleteTaskTC(idTodolist, idTask))
     }
 
 

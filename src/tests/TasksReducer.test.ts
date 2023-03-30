@@ -73,7 +73,7 @@ test ('correct task should be change title',()=>{
 test ('should be created new task',()=>{
     const titleForNewTask = "I'm New Task"
     const endState = TasksReducer(
-        startState,createTaskAC('todolistId2',titleForNewTask))
+        startState,createTaskAC('todolistId2',titleForNewTask,'9'))
 
     expect(endState['todolistId2'][0].title).toBe("I'm New Task")
     expect(endState['todolistId2'][1].title).toBe("Rembo1")

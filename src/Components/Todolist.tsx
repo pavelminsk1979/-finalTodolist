@@ -71,10 +71,10 @@ export const Todolist = ({
     let filterTasks = tasks[todolist.id]
     if (todolist.filter === 'new') {
         filterTasks = filterTasks.filter(
-            task => task.status===TaskStatus.Complete)
+            task => task.status===TaskStatus.New)
     } else if (todolist.filter === 'completed') {
         filterTasks = filterTasks.filter(
-            task => task.status===TaskStatus.New)
+            task => task.status===TaskStatus.Complete)
     }
 
 
