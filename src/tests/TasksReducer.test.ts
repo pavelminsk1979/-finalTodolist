@@ -51,7 +51,7 @@ test ('correct task should be delete',()=>{
 test ('correct task should be change Checkbox',()=>{
     const endState = TasksReducer(
         startState,changeCheckboxTaskAC(
-            'todolistId1','2',true))
+            'todolistId1','2',2))
 
     expect(endState['todolistId1'][0].status).toBe(TaskStatus.Complete)
     expect(endState['todolistId1'][1].status).toBe(TaskStatus.Complete)

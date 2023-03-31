@@ -6,21 +6,20 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import {
-    changeCheckboxTaskAC,
-    changeTitleTaskAC,
-     createTaskTC,
-     deleteTaskTC,
+    changeCheckboxTaskAC, changeCheckboxTaskTC,
+    changeTitleTaskAC, changeTitleTaskTC,
+    createTaskTC,
+    deleteTaskTC,
     StateTaskType
 } from "../state/TasksReducer";
 import {
-    changeTitleTodolistAC,
+    changeTitleTodolistAC, changeTitleTodolistTC,
     createTodolistTC, deleteTodolistAC, deleteTodolistTC,
     filterTodolistAC, setTodolists
 } from "../state/TodolistReducer";
 import {useSelector} from "react-redux";
 import {StateStoreType, useAppDispatch} from "../state/store";
 import {CommonTodolistType, FilterType} from "../common/types";
-
 
 
 function App() {
@@ -48,7 +47,7 @@ function App() {
 
 
     const changeTitleTodolist = (idTodolist: string, editTitle: string) => {
-        dispatch(changeTitleTodolistAC(idTodolist, editTitle))
+        dispatch(changeTitleTodolistTC(idTodolist, editTitle))
     }
 
     const createTodolist = useCallback((text: string) => {
@@ -57,7 +56,7 @@ function App() {
 
 
     const changeTitleTask = (idTodolist: string, idTask: string, editTitle: string) => {
-        dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+        dispatch(changeTitleTaskTC(idTodolist, idTask, editTitle))
     }
 
 
@@ -66,7 +65,7 @@ function App() {
     }
 
     const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
-        dispatch(changeCheckboxTaskAC(idTodolist, idTask, valueCheckbox))
+        dispatch(changeCheckboxTaskTC(idTodolist, idTask, valueCheckbox))
     }
 
     const deleteTask = (idTodolist: string, idTask: string) => {

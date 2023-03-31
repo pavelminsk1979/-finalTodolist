@@ -84,6 +84,13 @@ export const setTodolistsAC = (todolists: TodolistType[]) => {
 
 
 
+export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
+    todolistApi.updateTodolist(idTodolist, editTitle)
+        .then((respons) => {
+            dispatch(changeTitleTodolistAC( idTodolist, editTitle))
+        })
+}
+
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
     todolistApi.deleteTodolist(idTodolist)

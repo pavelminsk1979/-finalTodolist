@@ -1,7 +1,6 @@
 export type PayloadTaskType = {
     title:string,
     description:string,
-    completed:boolean,
     status:number,
     priority:number,
     startDate:string,

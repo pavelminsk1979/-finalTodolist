@@ -10,6 +10,7 @@ import {
 
 
 
+
 const instance = axios.create ({
     baseURL:'https://social-network.samuraijs.com/api/1.1/',
     withCredentials:true,
@@ -33,7 +34,7 @@ export const todolistApi = {
     },
 
     updateTodolist (todolistId:string,putAfterItemId:string) {
-        return instance.put<AxiosTodolistType>(`todo-lists/${todolistId}`,{putAfterItemId})
+        return instance.put<AxiosTodolistType>(`todo-lists/${todolistId}`,{title: putAfterItemId})
     },
 }
 
@@ -51,7 +52,11 @@ export const taskApi = {
     },
 
     updateTask (todolistId:string,taskId:string,payload:PayloadTaskType) {
-        return instance.put<AxiosTaskType<{item:TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`,{payload})
+        return instance.put<AxiosTaskType<{item:TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`,payload)
+    },
+
+    updateCheckboxTask (todolistId:string,taskId:string,payload:PayloadTaskType) {
+        return instance.put<AxiosTaskType<{item:TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`,payload)
     }
 }
 

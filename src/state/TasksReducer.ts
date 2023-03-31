@@ -1,8 +1,8 @@
-
 import {createTodolistACType, deleteTodolistACType, setTodolistsACType} from "./TodolistReducer";
 import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
+import {StateStoreType} from "./store";
 
 
 export type ActionTaskType =
@@ -23,9 +23,9 @@ const initialTaskState: StateTaskType = {}
 
 export const TasksReducer = (state: StateTaskType = initialTaskState, action: ActionTaskType): StateTaskType => {
     switch (action.type) {
-        case "Task/SET-TASKS":{
+        case "Task/SET-TASKS": {
             let copyStateTasks = {...state}
-            copyStateTasks[action.idTodolist]=action.tasks
+            copyStateTasks[action.idTodolist] = action.tasks
             return copyStateTasks
         }
 
@@ -38,7 +38,8 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
         case "Task/CREATE-TASK": {
             return {
                 ...state, [action.idTodolist]: [
-                    {description: '',
+                    {
+                        description: '',
                         title: action.text,
                         status: TaskStatus.New,
                         priority: 0,
@@ -56,7 +57,7 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
         case "Task/CHANGE-CHECKBOX": {
             return {
                 ...state, [action.idTodolist]: state[action.idTodolist].map(
-                    e => e.id === action.idTask ? {...e, isDone: action.valueCheckbox} : e
+                    e => e.id === action.idTask? {...e, status: action.value} : e
                 )
             }
         }
@@ -100,18 +101,18 @@ export const deleteTaskAC = (idTodolist: string, idTask: string) => {
 
 
 type changeCheckboxTaskACType = ReturnType<typeof changeCheckboxTaskAC>
-export const changeCheckboxTaskAC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
+export const changeCheckboxTaskAC = (idTodolist: string, idTask: string, value: number) => {
     return {
         type: 'Task/CHANGE-CHECKBOX',
         idTodolist,
         idTask,
-        valueCheckbox
+        value
     } as const
 }
 
 
 type createTaskACType = ReturnType<typeof createTaskAC>
-export const createTaskAC = (idTodolist: string, text: string,idTask:string) => {
+export const createTaskAC = (idTodolist: string, text: string, idTask: string) => {
     return {
         type: 'Task/CREATE-TASK',
         idTodolist,
@@ -131,7 +132,7 @@ export const changeTitleTaskAC = (idTodolist: string, idTask: string, editTitle:
 }
 
 type setTaskACType = ReturnType<typeof setTaskAC>
-export const setTaskAC = (idTodolist: string, tasks:TaskType[]) => {
+export const setTaskAC = (idTodolist: string, tasks: TaskType[]) => {
     return {
         type: 'Task/SET-TASKS',
         idTodolist,
@@ -141,12 +142,60 @@ export const setTaskAC = (idTodolist: string, tasks:TaskType[]) => {
 
 
 
+export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
+    dispatch: Dispatch, getState: () => StateStoreType) => {
+    const state = getState()
+    const allTasks = state.tasks
+    const taskForCorrectTodolist = allTasks[idTodolist]
+    const task = taskForCorrectTodolist.find(e => e.id === idTask)
+    let value:TaskStatus
+    if(valueCheckbox===true){
+        value=TaskStatus.Complete
+    } else {value = TaskStatus.New}
+    if (task) {
+        taskApi.updateCheckboxTask(idTodolist, idTask, {
+            title: task.title,
+            description: task.description,
+            status: value,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline
+        })
+            .then((respons) => {
+                dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
+            })
+    }
+}
+
+
+
+export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle: string) => (
+    dispatch: Dispatch, getState: () => StateStoreType) => {
+    const state = getState()
+    const allTasks = state.tasks
+    const taskForCorrectTodolist = allTasks[idTodolist]
+    const task = taskForCorrectTodolist.find(e => e.id === idTask)
+    if (task) {
+        taskApi.updateTask(idTodolist, idTask, {
+            title: editTitle,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline
+        })
+            .then((respons) => {
+                dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+            })
+    }
+}
+
 
 export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch: Dispatch) => {
     taskApi.createTask(idTodolist, text)
-        .then ((respons)=>{
-            dispatch(createTaskAC(idTodolist,text,respons.data.data.item.id))
+        .then((respons) => {
+            dispatch(createTaskAC(idTodolist, text, respons.data.data.item.id))
         })
 }
 
@@ -154,15 +203,15 @@ export const createTaskTC = (idTodolist: string, text: string) => (
 export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
     taskApi.deleteTask(idTodolist, idTask)
-        .then ((respons)=>{
-            dispatch(deleteTaskAC(idTodolist,idTask))
+        .then((respons) => {
+            dispatch(deleteTaskAC(idTodolist, idTask))
         })
 }
 
 
 export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
     taskApi.getTasks(todolistId)
-        .then ((respons)=>{
-            dispatch(setTaskAC(todolistId,respons.data.items))
-    })
+        .then((respons) => {
+            dispatch(setTaskAC(todolistId, respons.data.items))
+        })
 }
