@@ -3,10 +3,13 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import {action} from "@storybook/addon-actions";
 import {Todolist} from "../Components/Todolist";
 import {TaskStatus} from "../common/types";
+import {ReduxStoreProviderDecorator} from "./decorators/ReduxStoreProviderDecorator";
+
 
 export default {
     title: 'Todolist Project/Todolist',
     component:Todolist ,
+    decorators:[ReduxStoreProviderDecorator]
 } as ComponentMeta<typeof Todolist>;
 
 
