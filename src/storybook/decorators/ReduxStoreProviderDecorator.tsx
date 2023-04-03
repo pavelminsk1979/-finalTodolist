@@ -5,10 +5,12 @@ import {StateStoreType} from "../../state/store";
 import {Provider} from "react-redux";
 import {TaskStatus} from "../../common/types";
 import thunk from "redux-thunk";
+import {appReducer} from "../../state/appReducer";
 
 const rootReducer = combineReducers({
     todolists:TodolistReducer,
-    tasks:TasksReducer
+    tasks:TasksReducer,
+    app:appReducer
 })
 
 
@@ -37,6 +39,9 @@ const initialGlobalState = {
             {id: '7', title: 'Avatar', status:TaskStatus.Complete, todoListId:'todolistId2',description:'',startDate:'',deadline:'',
                 addedDate:'',order:0, priority:1}
         ]
+    },
+    app: {
+        statusLoading: 'loading'
     }
 }
 

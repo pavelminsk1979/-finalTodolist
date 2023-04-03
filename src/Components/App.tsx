@@ -6,20 +6,22 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import {
-    changeCheckboxTaskAC, changeCheckboxTaskTC,
-    changeTitleTaskAC, changeTitleTaskTC,
+     changeCheckboxTaskTC,
+     changeTitleTaskTC,
     createTaskTC,
     deleteTaskTC,
     StateTaskType
 } from "../state/TasksReducer";
 import {
-    changeTitleTodolistAC, changeTitleTodolistTC,
-    createTodolistTC, deleteTodolistAC, deleteTodolistTC,
+     changeTitleTodolistTC,
+    createTodolistTC, deleteTodolistTC,
     filterTodolistAC, setTodolists
 } from "../state/TodolistReducer";
 import {useSelector} from "react-redux";
 import {StateStoreType, useAppDispatch} from "../state/store";
 import {CommonTodolistType, FilterType} from "../common/types";
+import LinearProgress from "@mui/material/LinearProgress";
+import {LoadingType} from "../state/appReducer";
 
 
 function App() {
@@ -32,6 +34,10 @@ function App() {
 
     const todolists = useSelector<StateStoreType, CommonTodolistType[]>(
         state => state.todolists)
+
+    const statusLoading = useSelector<StateStoreType,LoadingType>(
+        state => state.app.statusLoading
+    )
 
     useEffect(() => {
         dispatch(setTodolists())
@@ -77,6 +83,8 @@ function App() {
         <div>
 
             <PrimarySearchAppBar/>
+            {statusLoading==='loading'&&<LinearProgress
+                color="secondary" />}
             <Container>
                 <Grid container style={{padding: '20px'}}>
                     <CreateItemForm name={'Todolist'} callback={createTodolist}/>

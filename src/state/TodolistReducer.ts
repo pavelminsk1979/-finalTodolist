@@ -2,6 +2,7 @@ import {v1} from "uuid";
 import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
+import {setLoadingAC} from "./appReducer";
 
 
 export type ActionTodolistType =
@@ -85,21 +86,26 @@ export const setTodolistsAC = (todolists: TodolistType[]) => {
 
 
 export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     todolistApi.updateTodolist(idTodolist, editTitle)
         .then((respons) => {
             dispatch(changeTitleTodolistAC( idTodolist, editTitle))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }
 
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     todolistApi.deleteTodolist(idTodolist)
         .then((respons) => {
             dispatch(deleteTodolistAC( idTodolist))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }
 
 export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     todolistApi.createTodolist(text)
         .then((respons) => {
             dispatch(createTodolistAC(respons.data.data.item.id, text))
@@ -108,8 +114,10 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
 
 
 export const setTodolists = () => (dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     todolistApi.getTodolists()
         .then((respons) => {
             dispatch(setTodolistsAC(respons.data))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }

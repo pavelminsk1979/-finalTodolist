@@ -3,6 +3,7 @@ import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
+import {setLoadingAC} from "./appReducer";
 
 
 export type ActionTaskType =
@@ -57,7 +58,7 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
         case "Task/CHANGE-CHECKBOX": {
             return {
                 ...state, [action.idTodolist]: state[action.idTodolist].map(
-                    e => e.id === action.idTask? {...e, status: action.value} : e
+                    e => e.id === action.idTask ? {...e, status: action.value} : e
                 )
             }
         }
@@ -141,18 +142,20 @@ export const setTaskAC = (idTodolist: string, tasks: TaskType[]) => {
 }
 
 
-
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
     dispatch: Dispatch, getState: () => StateStoreType) => {
     const state = getState()
     const allTasks = state.tasks
     const taskForCorrectTodolist = allTasks[idTodolist]
     const task = taskForCorrectTodolist.find(e => e.id === idTask)
-    let value:TaskStatus
-    if(valueCheckbox===true){
-        value=TaskStatus.Complete
-    } else {value = TaskStatus.New}
+    let value: TaskStatus
+    if (valueCheckbox === true) {
+        value = TaskStatus.Complete
+    } else {
+        value = TaskStatus.New
+    }
     if (task) {
+        dispatch(setLoadingAC('loading'))
         taskApi.updateCheckboxTask(idTodolist, idTask, {
             title: task.title,
             description: task.description,
@@ -163,10 +166,10 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
         })
             .then((respons) => {
                 dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
+                dispatch(setLoadingAC('finishLoading'))
             })
     }
 }
-
 
 
 export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle: string) => (
@@ -176,6 +179,7 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
     const taskForCorrectTodolist = allTasks[idTodolist]
     const task = taskForCorrectTodolist.find(e => e.id === idTask)
     if (task) {
+        dispatch(setLoadingAC('loading'))
         taskApi.updateTask(idTodolist, idTask, {
             title: editTitle,
             description: task.description,
@@ -186,6 +190,7 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
         })
             .then((respons) => {
                 dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+                dispatch(setLoadingAC('finishLoading'))
             })
     }
 }
@@ -193,25 +198,32 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
 
 export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
-            dispatch(createTaskAC(idTodolist, text, respons.data.data.item.id))
+            dispatch(createTaskAC(
+                idTodolist, text, respons.data.data.item.id))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }
 
 
 export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     taskApi.deleteTask(idTodolist, idTask)
         .then((respons) => {
             dispatch(deleteTaskAC(idTodolist, idTask))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }
 
 
 export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
+    dispatch(setLoadingAC('loading'))
     taskApi.getTasks(todolistId)
         .then((respons) => {
             dispatch(setTaskAC(todolistId, respons.data.items))
+            dispatch(setLoadingAC('finishLoading'))
         })
 }
