@@ -41,7 +41,8 @@ const initialGlobalState = {
         ]
     },
     app: {
-        statusLoading: 'loading'
+        statusLoading: 'loading',
+        error:'Some error'
     }
 }
 

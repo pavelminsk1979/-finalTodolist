@@ -22,6 +22,7 @@ import {StateStoreType, useAppDispatch} from "../state/store";
 import {CommonTodolistType, FilterType} from "../common/types";
 import LinearProgress from "@mui/material/LinearProgress";
 import {LoadingType} from "../state/appReducer";
+import {ErrorSnackbar} from "./ErrorSnackBar";
 
 
 function App() {
@@ -85,6 +86,7 @@ function App() {
             <PrimarySearchAppBar/>
             {statusLoading==='loading'&&<LinearProgress
                 color="secondary" />}
+            <ErrorSnackbar/>
             <Container>
                 <Grid container style={{padding: '20px'}}>
                     <CreateItemForm name={'Todolist'} callback={createTodolist}/>
