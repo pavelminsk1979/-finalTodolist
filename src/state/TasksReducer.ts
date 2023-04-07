@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
-import {setLoadingAC} from "./appReducer";
+import {errorShowAC, setLoadingAC} from "./appReducer";
 
 
 export type ActionTaskType =
@@ -201,9 +201,20 @@ export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch(setLoadingAC('loading'))
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
-            dispatch(createTaskAC(
-                idTodolist, text, respons.data.data.item.id))
-            dispatch(setLoadingAC('finishLoading'))
+            if(respons.data.resultCode===0){
+                dispatch(createTaskAC(
+                    idTodolist, text, respons.data.data.item.id))
+                dispatch(setLoadingAC('finishLoading'))
+            } else {
+                if(respons.data.messages.length){
+                    dispatch(errorShowAC(respons.data.messages[0]))
+                } else {
+                    dispatch(errorShowAC('Some ERROR'))
+                }
+                dispatch(setLoadingAC('finishLoading'))
+
+            }
+
         })
 }
 
