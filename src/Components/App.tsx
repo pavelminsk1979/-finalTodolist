@@ -89,7 +89,9 @@ function App() {
             <ErrorSnackbar/>
             <Container>
                 <Grid container style={{padding: '20px'}}>
-                    <CreateItemForm name={'Todolist'} callback={createTodolist}/>
+                    <CreateItemForm
+                        name={'Todolist'}
+                        callback={createTodolist}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {
@@ -108,7 +110,8 @@ function App() {
                                         deleteTask={deleteTask}
                                         tasks={tasks}
                                         todolist={todol}
-                                        title={todol.title}/>
+                                        title={todol.title}
+                                        disableValue={todol.disableStatus}/>
                                 </Paper>
                             </Grid>
                         })

@@ -60,5 +60,6 @@ export  type TodolistType = {
 export type FilterType = 'all' | 'new' | 'completed'
 
 export type CommonTodolistType = TodolistType & {
-    filter:FilterType
+    filter:FilterType,
+    disableStatus:boolean
 }

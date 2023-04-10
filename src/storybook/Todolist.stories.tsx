@@ -26,7 +26,7 @@ TodolistStory.args = {
     createTask : action('createTask'),
     filter:'all',
     title:"I'm importatnt todolist",
-    todolist:{id:'11',title:"I'm importatnt todolist",filter:'all',addedData: '', order: 0},
+    todolist:{id:'11',title:"I'm importatnt todolist",filter:'all',addedData: '', order: 0,disableStatus:false},
     tasks:{
     ['11']:[
         {id:'1',title:"I'm MAIN Title",status:TaskStatus.Complete, todoListId:'todolistId1',description:'',startDate:'',deadline:'',

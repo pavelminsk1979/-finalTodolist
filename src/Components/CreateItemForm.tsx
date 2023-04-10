@@ -7,10 +7,11 @@ import TextField from "@mui/material/TextField";
 type CreateItemFormType = {
     name:string
     callback:(text: string)=>void
+    disableValue?:boolean
 }
 
 
-export const CreateItemForm =memo( ({name,callback}: CreateItemFormType) => {
+export const CreateItemForm =memo( ({name,callback,disableValue}: CreateItemFormType) => {
 
     const [text, setText] = useState('')
     const [inputError, setInputError] = useState<string | null>(null)
@@ -55,6 +56,7 @@ export const CreateItemForm =memo( ({name,callback}: CreateItemFormType) => {
 
 
             <IconButton
+                disabled={disableValue}
                 onClick={onClickCreateTask}>
                 <PlusOne/>{name}
             </IconButton>

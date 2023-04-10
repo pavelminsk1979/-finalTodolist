@@ -57,8 +57,8 @@ test('correct property with tasks should be delete when delete todolist', ()=>{
      }
 
     const startTodolistState:  CommonTodolistType[] = [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all',addedData: '', order: 0},
-        {id: 'todolistId2', title: 'What to watch', filter: 'all',addedData: '', order: 0},
+        {id: 'todolistId1', title: 'What to learn', filter: 'all',addedData: '', order: 0,disableStatus:false},
+        {id: 'todolistId2', title: 'What to watch', filter: 'all',addedData: '', order: 0,disableStatus:false},
     ]
 
     const action = deleteTodolistAC('todolistId2')

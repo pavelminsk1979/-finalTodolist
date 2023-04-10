@@ -12,6 +12,7 @@ type TaskComponentType = {
     callbackDel:(idTask: string)=>void
     callbackCheckbox:(idTask: string, valueCheckbox: boolean)=>void
     callbackChangeTitle:(idTask: string, editTitle: string)=>void
+    
 }
 
 export const Task = (

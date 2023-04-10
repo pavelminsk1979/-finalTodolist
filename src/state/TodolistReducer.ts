@@ -1,4 +1,3 @@
-import {v1} from "uuid";
 import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
@@ -11,6 +10,7 @@ export type ActionTodolistType =
     | filterTodolistACType
     | deleteTodolistACType
     | setTodolistsACType
+    | changeDisabledStatusACType
 
 const initialTodolState: CommonTodolistType[] = []
 
@@ -21,7 +21,14 @@ export const TodolistReducer = (
             return state.map(e => e.id === action.idTodolist ? {...e, title: action.editTitle} : e)
         }
         case "Todolist/CREATE-TODOLIST": {
-            return [{id: action.idTodolist, title: action.text, filter: 'all', addedData: '', order: 0}, ...state]
+            return [{
+                id: action.idTodolist,
+                title: action.text,
+                filter: 'all',
+                addedData: '',
+                order: 0,
+                disableStatus: false
+            }, ...state]
         }
         case "Todolist/CHANGE-FILTER-VALUE": {
             return state.map(e => e.id === action.idTodolist ? {...e, filter: action.valueFilter} : e)
@@ -30,7 +37,11 @@ export const TodolistReducer = (
             return state.filter(e => e.id !== action.idTodolist)
         }
         case "Todolist/SET-TODOLISTS": {
-            return action.todolists.map(e => ({...e, filter: 'all'}))
+            return action.todolists.map(e => ({...e, filter: 'all', disableStatus: false}))
+        }
+        case "Todolist/CHANGE-DISABLE-STATUS":{
+            return state.map(e=>e.id===action.idTodolist
+                ?{...e,disableStatus:action.disableValue}:e)
         }
 
         default :
@@ -83,6 +94,15 @@ export const setTodolistsAC = (todolists: TodolistType[]) => {
     } as const
 }
 
+export type changeDisabledStatusACType = ReturnType<typeof changeDisabledStatusAC>
+export const changeDisabledStatusAC = (idTodolist: string, disableValue: boolean) => {
+    return {
+        type: 'Todolist/CHANGE-DISABLE-STATUS',
+        idTodolist,
+        disableValue
+    } as const
+}
+
 
 export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
@@ -96,10 +116,12 @@ export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => 
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
+    dispatch(changeDisabledStatusAC(idTodolist,true))
     todolistApi.deleteTodolist(idTodolist)
         .then((respons) => {
             dispatch(deleteTodolistAC(idTodolist))
             dispatch(setLoadingAC('finishLoading'))
+            dispatch(changeDisabledStatusAC(idTodolist,false))
         })
 }
 

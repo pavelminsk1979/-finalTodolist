@@ -21,6 +21,7 @@ type TodolistType = {
     createTask: (idTodolist: string, text: string) => void
     todolist: CommonTodolistType
     tasks: StateTaskType
+    disableValue:boolean
 }
 
 export const Todolist = ({
@@ -31,7 +32,7 @@ export const Todolist = ({
                              createTask,
                              changeCheckboxTask,
                              filter,
-                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask
+                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask,disableValue
                          }: TodolistType) => {
 
     const dispatch = useAppDispatch()
@@ -87,6 +88,7 @@ export const Todolist = ({
                     title={title}/>
 
                 <IconButton
+                    disabled={disableValue}
                     onClick={deleteTodolistHundler}>
                     <DeleteForever/>
                 </IconButton>
@@ -94,6 +96,7 @@ export const Todolist = ({
             </h3>
 
             <CreateItemForm
+                disableValue={disableValue}
                 name={'Task'}
                 callback={createTaskHundler}/>
 
