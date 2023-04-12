@@ -108,8 +108,22 @@ export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => 
     dispatch(setLoadingAC('loading'))
     todolistApi.updateTodolist(idTodolist, editTitle)
         .then((respons) => {
-            dispatch(changeTitleTodolistAC(idTodolist, editTitle))
+            if(respons.data.resultCode===0){
+                dispatch(changeTitleTodolistAC(idTodolist, editTitle))
+                dispatch(setLoadingAC('finishLoading'))
+            } else {
+                if(respons.data.messages.length){
+                    dispatch(errorShowAC(respons.data.messages[0]))
+                } else {
+                    dispatch(errorShowAC('Some ERROR'))
+                }
+                dispatch(setLoadingAC('finishLoading'))
+            }
+
+        })
+        .catch((error)=>{
             dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
         })
 }
 
@@ -122,6 +136,10 @@ export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => 
             dispatch(deleteTodolistAC(idTodolist))
             dispatch(setLoadingAC('finishLoading'))
             dispatch(changeDisabledStatusAC(idTodolist,false))
+        })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
         })
 }
 
@@ -142,6 +160,10 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
                 dispatch(setLoadingAC('finishLoading'))
             }
         })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
+        })
 }
 
 
@@ -151,5 +173,9 @@ export const setTodolists = () => (dispatch: Dispatch) => {
         .then((respons) => {
             dispatch(setTodolistsAC(respons.data))
             dispatch(setLoadingAC('finishLoading'))
+        })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
         })
 }

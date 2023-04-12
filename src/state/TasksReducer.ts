@@ -168,6 +168,10 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
                 dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
                 dispatch(setLoadingAC('finishLoading'))
             })
+            .catch((error)=>{
+                dispatch(setLoadingAC('finishLoading'))
+                dispatch(errorShowAC(error.message))
+            })
     }
 }
 
@@ -189,8 +193,21 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
             deadline: task.deadline
         })
             .then((respons) => {
-                dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+                if(respons.data.resultCode===0){
+                    dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+                    dispatch(setLoadingAC('finishLoading'))
+                }else{
+                    if(respons.data.messages.length){
+                        dispatch(errorShowAC(respons.data.messages[0]))
+                    }else {
+                        dispatch(errorShowAC('Some ERROR'))
+                    }
+                    dispatch(setLoadingAC('finishLoading'))
+                }
+            })
+            .catch((error)=>{
                 dispatch(setLoadingAC('finishLoading'))
+                dispatch(errorShowAC(error.message))
             })
     }
 }
@@ -216,6 +233,10 @@ export const createTaskTC = (idTodolist: string, text: string) => (
             }
 
         })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
+        })
 }
 
 
@@ -227,6 +248,10 @@ export const deleteTaskTC = (idTodolist: string, idTask: string) => (
             dispatch(deleteTaskAC(idTodolist, idTask))
             dispatch(setLoadingAC('finishLoading'))
         })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
+        })
 }
 
 
@@ -236,5 +261,9 @@ export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
         .then((respons) => {
             dispatch(setTaskAC(todolistId, respons.data.items))
             dispatch(setLoadingAC('finishLoading'))
+        })
+        .catch((error)=>{
+            dispatch(setLoadingAC('finishLoading'))
+            dispatch(errorShowAC(error.message))
         })
 }
