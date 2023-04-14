@@ -2,6 +2,7 @@ import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
 import {errorShowAC, setLoadingAC} from "./appReducer";
+import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 
 
 export type ActionTodolistType =
@@ -39,9 +40,9 @@ export const TodolistReducer = (
         case "Todolist/SET-TODOLISTS": {
             return action.todolists.map(e => ({...e, filter: 'all', disableStatus: false}))
         }
-        case "Todolist/CHANGE-DISABLE-STATUS":{
-            return state.map(e=>e.id===action.idTodolist
-                ?{...e,disableStatus:action.disableValue}:e)
+        case "Todolist/CHANGE-DISABLE-STATUS": {
+            return state.map(e => e.id === action.idTodolist
+                ? {...e, disableStatus: action.disableValue} : e)
         }
 
         default :
@@ -108,38 +109,31 @@ export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => 
     dispatch(setLoadingAC('loading'))
     todolistApi.updateTodolist(idTodolist, editTitle)
         .then((respons) => {
-            if(respons.data.resultCode===0){
+            if (respons.data.resultCode === 0) {
                 dispatch(changeTitleTodolistAC(idTodolist, editTitle))
                 dispatch(setLoadingAC('finishLoading'))
             } else {
-                if(respons.data.messages.length){
-                    dispatch(errorShowAC(respons.data.messages[0]))
-                } else {
-                    dispatch(errorShowAC('Some ERROR'))
-                }
-                dispatch(setLoadingAC('finishLoading'))
+                utilsFanctionForShowError(respons.data.messages, dispatch)
             }
 
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
 
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
-    dispatch(changeDisabledStatusAC(idTodolist,true))
+    dispatch(changeDisabledStatusAC(idTodolist, true))
     todolistApi.deleteTodolist(idTodolist)
         .then((respons) => {
             dispatch(deleteTodolistAC(idTodolist))
             dispatch(setLoadingAC('finishLoading'))
-            dispatch(changeDisabledStatusAC(idTodolist,false))
+            dispatch(changeDisabledStatusAC(idTodolist, false))
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
 
@@ -152,17 +146,11 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
                     respons.data.data.item.id, text))
                 dispatch(setLoadingAC('finishLoading'))
             } else {
-                if (respons.data.messages.length) {
-                    dispatch(errorShowAC(respons.data.messages[0]))
-                } else {
-                    dispatch(errorShowAC('Some error'))
-                }
-                dispatch(setLoadingAC('finishLoading'))
+                utilsFanctionForShowError(respons.data.messages, dispatch)
             }
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
 
@@ -174,8 +162,7 @@ export const setTodolists = () => (dispatch: Dispatch) => {
             dispatch(setTodolistsAC(respons.data))
             dispatch(setLoadingAC('finishLoading'))
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }

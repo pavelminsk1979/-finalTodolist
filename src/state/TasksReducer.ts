@@ -4,6 +4,7 @@ import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
 import {errorShowAC, setLoadingAC} from "./appReducer";
+import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 
 
 export type ActionTaskType =
@@ -168,9 +169,8 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
                 dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
                 dispatch(setLoadingAC('finishLoading'))
             })
-            .catch((error)=>{
-                dispatch(setLoadingAC('finishLoading'))
-                dispatch(errorShowAC(error.message))
+            .catch((error) => {
+                utilsFanctionForMethodCatch(error.message, dispatch)
             })
     }
 }
@@ -193,21 +193,16 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
             deadline: task.deadline
         })
             .then((respons) => {
-                if(respons.data.resultCode===0){
+                if (respons.data.resultCode === 0) {
                     dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
                     dispatch(setLoadingAC('finishLoading'))
-                }else{
-                    if(respons.data.messages.length){
-                        dispatch(errorShowAC(respons.data.messages[0]))
-                    }else {
-                        dispatch(errorShowAC('Some ERROR'))
-                    }
-                    dispatch(setLoadingAC('finishLoading'))
+                } else {
+                    utilsFanctionForShowError(
+                        respons.data.messages, dispatch)
                 }
             })
-            .catch((error)=>{
-                dispatch(setLoadingAC('finishLoading'))
-                dispatch(errorShowAC(error.message))
+            .catch((error) => {
+                utilsFanctionForMethodCatch(error.message, dispatch)
             })
     }
 }
@@ -218,24 +213,17 @@ export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch(setLoadingAC('loading'))
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
-            if(respons.data.resultCode===0){
+            if (respons.data.resultCode === 0) {
                 dispatch(createTaskAC(
                     idTodolist, text, respons.data.data.item.id))
                 dispatch(setLoadingAC('finishLoading'))
             } else {
-                if(respons.data.messages.length){
-                    dispatch(errorShowAC(respons.data.messages[0]))
-                } else {
-                    dispatch(errorShowAC('Some ERROR'))
-                }
-                dispatch(setLoadingAC('finishLoading'))
-
+                utilsFanctionForShowError(
+                    respons.data.messages, dispatch)
             }
-
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
 
@@ -248,9 +236,8 @@ export const deleteTaskTC = (idTodolist: string, idTask: string) => (
             dispatch(deleteTaskAC(idTodolist, idTask))
             dispatch(setLoadingAC('finishLoading'))
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
 
@@ -262,8 +249,7 @@ export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
             dispatch(setTaskAC(todolistId, respons.data.items))
             dispatch(setLoadingAC('finishLoading'))
         })
-        .catch((error)=>{
-            dispatch(setLoadingAC('finishLoading'))
-            dispatch(errorShowAC(error.message))
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
         })
 }
