@@ -6,11 +6,13 @@ import {Provider} from "react-redux";
 import {TaskStatus} from "../../common/types";
 import thunk from "redux-thunk";
 import {appReducer} from "../../state/appReducer";
+import {authReducer} from "../../state/authReducer";
 
 const rootReducer = combineReducers({
     todolists:TodolistReducer,
     tasks:TasksReducer,
-    app:appReducer
+    app:appReducer,
+    auth:authReducer
 })
 
 
@@ -43,6 +45,9 @@ const initialGlobalState = {
     app: {
         statusLoading: 'loading',
         error:'Some error'
+    },
+    auth: {
+        isLoggedIn:false
     }
 }
 

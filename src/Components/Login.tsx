@@ -8,14 +8,19 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
+import {useAppDispatch} from "../state/store";
+import {loginTC} from "../state/authReducer";
 
-type FormikErrorType = {
+
+
+  type FormikErrorType = {
     email?: string,
     password?: string,
     rememberMe?:boolean
 }
 
 export const Login = () => {
+    const dispatch = useAppDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -38,7 +43,7 @@ export const Login = () => {
             return errors;
         },
         onSubmit: values => {
-            alert(JSON.stringify(values))
+            dispatch(loginTC(values))
             formik.resetForm()
         }
     })
