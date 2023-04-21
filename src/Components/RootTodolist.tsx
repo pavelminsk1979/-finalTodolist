@@ -22,6 +22,7 @@ import {CommonTodolistType, FilterType} from "../common/types";
 import LinearProgress from "@mui/material/LinearProgress";
 import {LoadingType} from "../state/appReducer";
 import {ErrorSnackbar} from "./ErrorSnackBar";
+import {Navigate} from "react-router-dom";
 
 
  export function RootTodolist () {
@@ -38,8 +39,11 @@ import {ErrorSnackbar} from "./ErrorSnackBar";
     const statusLoading = useSelector<StateStoreType,LoadingType>(
         state => state.app.statusLoading
     )
+     const isLoggedIn = useSelector<StateStoreType,boolean>(
+         state => state.auth.isLoggedIn)
 
     useEffect(() => {
+        if(!isLoggedIn){return}
         dispatch(setTodolists())
     }, [])
 
@@ -77,6 +81,10 @@ import {ErrorSnackbar} from "./ErrorSnackBar";
     const deleteTask = (idTodolist: string, idTask: string) => {
         dispatch(deleteTaskTC(idTodolist, idTask))
     }
+
+     if(!isLoggedIn){
+         return <Navigate to={'/login'}/>
+     }
 
 
     return (
