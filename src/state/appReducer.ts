@@ -1,43 +1,79 @@
+import {Dispatch} from "redux";
+import {authApi} from "../api/api";
+import {setIsLoggedInAC} from "./authReducer";
+import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
 
 
-export type LoadingType = 'idle'| 'loading' | 'finishLoading'
-
-const initialState = {
-    statusLoading : 'finishLoading' as LoadingType,
-    error:null as null | string
-}
+export type LoadingType = 'idle' | 'loading' | 'finishLoading'
 
 export type InitialStateType = {
-    statusLoading:LoadingType
+    statusLoading: LoadingType
     error: null | string
+    isInitialized:boolean
 }
 
-type ActionType = setLoadingACType|errorShowACType
+const initialState:InitialStateType = {
+    statusLoading: 'finishLoading',
+    error: null ,
+    isInitialized:false
+}
 
-export const appReducer = (state:InitialStateType = initialState,action : ActionType) : InitialStateType => {
+
+type ActionType = setLoadingACType | errorShowACType |setInitializedACType
+
+export const appReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
     switch (action.type) {
-        case 'APP/SET-LOADING':{
-            return {...state,statusLoading:action.valueLoading}
+        case 'APP/SET-LOADING': {
+            return {...state, statusLoading: action.valueLoading}
         }
-        case "APP/ERROR-SHOW":{
-            return {...state,error:action.errorText}
+        case "APP/ERROR-SHOW": {
+            return {...state, error: action.errorText}
         }
-        default:return state
+        case "APP/SET-IS-INITIALIZED":{
+            return {...state,isInitialized:action.isInitialized}
+        }
+        default:
+            return state
     }
 }
 
 type errorShowACType = ReturnType<typeof errorShowAC>
-export const errorShowAC = (errorText:null|string) => {
-  return{
-    type:'APP/ERROR-SHOW',
-    errorText
-  }as const
+export const errorShowAC = (errorText: null | string) => {
+    return {
+        type: 'APP/ERROR-SHOW',
+        errorText
+    } as const
 }
 
 export type setLoadingACType = ReturnType<typeof setLoadingAC>
-export  const setLoadingAC = (valueLoading:LoadingType) => {
-  return{
-      type:'APP/SET-LOADING',
-      valueLoading
-  }as const
+export const setLoadingAC = (valueLoading: LoadingType) => {
+    return {
+        type: 'APP/SET-LOADING',
+        valueLoading
+    } as const
+}
+
+type setInitializedACType = ReturnType<typeof setInitializedAC>
+export const setInitializedAC = (isInitialized:boolean) => {
+    return{
+        type:'APP/SET-IS-INITIALIZED',
+        isInitialized
+    }as const
+}
+
+
+
+export const initializeAppTC = () => (dispatch: Dispatch) => {
+    authApi.me()
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC(true))
+            }
+        })
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
+        })
+        .finally(()=>{
+            dispatch(setInitializedAC(true))
+        })
 }

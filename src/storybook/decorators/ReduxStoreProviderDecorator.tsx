@@ -44,7 +44,8 @@ const initialGlobalState = {
     },
     app: {
         statusLoading: 'loading',
-        error:'Some error'
+        error:'Some error',
+        isInitialized:false
     },
     auth: {
         isLoggedIn:false

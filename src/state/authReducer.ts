@@ -15,10 +15,8 @@ type initialStateAuthReducerType = {
 type AuthReducerActionType = setIsLoggedInACType
 
 export const authReducer = (state:initialStateAuthReducerType=initialStateAuthReducer,action:AuthReducerActionType):initialStateAuthReducerType => {
-    debugger
   switch (action.type) {
       case 'auth/SET-IS-LOGGED-IN':{
-          debugger
           return {...state,isLoggedIn:action.value}
       }
       default:return state
@@ -27,7 +25,7 @@ export const authReducer = (state:initialStateAuthReducerType=initialStateAuthRe
 
 
 type setIsLoggedInACType = ReturnType<typeof setIsLoggedInAC>
-const setIsLoggedInAC = (value:boolean) => {
+export const setIsLoggedInAC = (value:boolean) => {
     return{
         type:'auth/SET-IS-LOGGED-IN',
         value

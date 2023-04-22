@@ -1,8 +1,7 @@
 import axios from "axios";
 import {
-    AxiosGetTaskType,
-    AxiosTaskType,
-    AxiosTodolistType, LoginDataType,
+    AxiosGetTaskType, AxiosResponseType,
+    AxiosTaskType, LoginDataType, MeResponseType,
     PayloadTaskType,
     TaskType,
     TodolistType
@@ -19,7 +18,10 @@ const instance = axios.create({
 
 export const authApi = {
     logIn(data: LoginDataType) {
-        return instance.post<AxiosTodolistType<{userId:number}>>('auth/login',data)
+        return instance.post<AxiosResponseType<{userId:number}>>('auth/login',data)
+    },
+    me () {
+        return instance.get<AxiosResponseType<MeResponseType>>('auth/me')
     }
 }
 
@@ -30,15 +32,15 @@ export const todolistApi = {
     },
 
     createTodolist(title: string) {
-        return instance.post<AxiosTodolistType<{ item: TodolistType }>>('todo-lists', {title})
+        return instance.post<AxiosResponseType<{ item: TodolistType }>>('todo-lists', {title})
     },
 
     deleteTodolist(todolistId: string) {
-        return instance.delete<AxiosTodolistType>(`todo-lists/${todolistId}`)
+        return instance.delete<AxiosResponseType>(`todo-lists/${todolistId}`)
     },
 
     updateTodolist(todolistId: string, putAfterItemId: string) {
-        return instance.put<AxiosTodolistType>(`todo-lists/${todolistId}`, {title: putAfterItemId})
+        return instance.put<AxiosResponseType>(`todo-lists/${todolistId}`, {title: putAfterItemId})
     },
 }
 

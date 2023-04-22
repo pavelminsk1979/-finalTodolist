@@ -73,14 +73,12 @@ export const Login = () => {
                 <FormGroup>
                     <TextField
                         {...formik.getFieldProps('email')}
-                        label="Email"
                         margin="normal"/>
                     {formik.touched.email &&formik.errors.email&&<div style={{color:'red'}}>{
                         formik.errors.email}</div>}
                     <TextField
                         {...formik.getFieldProps('password')}
                         type="password"
-                        label="Password"
                         margin="normal"/>
                     {formik.touched.password &&formik.errors.password&&<div style={
                         {color:'red'}}>{formik.errors.password}</div>}

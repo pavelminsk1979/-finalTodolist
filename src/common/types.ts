@@ -42,7 +42,7 @@ export type TaskType = {
 
 
 
-export type AxiosTodolistType<T={}> = {
+export type AxiosResponseType<T={}> = {
     resultCode:number,
     messages:string[],
     fieldsErrors: string[],
@@ -70,4 +70,10 @@ export type CommonTodolistType = TodolistType & {
     password: string,
     rememberMe?:boolean
     captcha?:string
+}
+
+export type MeResponseType = {
+    id:number,
+    email:string,
+    login:string
 }
