@@ -8,16 +8,16 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AttachMoney from "@mui/icons-material/AttachMoney";
 import Coffee from "@mui/icons-material/Coffee";
-import DirectionsRun from "@mui/icons-material/DirectionsRun";
 import Liquor from "@mui/icons-material/Liquor";
 import LocalHotel from "@mui/icons-material/LocalHotel";
 import SmokingRooms from "@mui/icons-material/SmokingRooms";
+import {useAppDispatch} from "../state/store";
+import {logOutTC} from "../state/authReducer";
 
 
 
@@ -26,12 +26,10 @@ export default function PrimarySearchAppBar() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
 
+    const dispatch = useAppDispatch()
+
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
@@ -105,20 +103,12 @@ export default function PrimarySearchAppBar() {
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
         </Menu>
     );
+    
+    const handleOnClick = () => {
+        dispatch(logOutTC())
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -185,10 +175,11 @@ export default function PrimarySearchAppBar() {
                             aria-label="account of current user"
                             aria-controls={menuId}
                             aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
+                            onClick={handleOnClick}
                             color="inherit"
                         >
-                            <DirectionsRun />
+                            Logout
+                            {/*<DirectionsRun />*/}
                         </IconButton>
                     </Box>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

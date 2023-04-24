@@ -46,4 +46,18 @@ export const loginTC = (data: LoginDataType) => (dispatch:Dispatch) => {
         })
 }
 
+export const logOutTC = () => (dispatch:Dispatch) => {
+    dispatch(setLoadingAC('loading'))
+    authApi.logOut()
+        .then((response)=>{
+            if(response.data.resultCode===0){
+                dispatch(setIsLoggedInAC(false))
+                dispatch(setLoadingAC('finishLoading'))
+            }
+        })
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
+        })
+}
+
 
