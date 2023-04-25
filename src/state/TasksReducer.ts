@@ -1,9 +1,14 @@
-import {createTodolistACType, deleteTodolistACType, setTodolistsACType} from "./TodolistReducer";
+import {
+    createTodolistACType,
+    deleteDataWhenLogOutACType,
+    deleteTodolistACType,
+    setTodolistsACType
+} from "./TodolistReducer";
 import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
-import {errorShowAC, setLoadingAC} from "./appReducer";
+import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 
 
@@ -16,6 +21,7 @@ export type ActionTaskType =
     | deleteTodolistACType
     | setTodolistsACType
     | setTaskACType
+    | deleteDataWhenLogOutACType
 
 export type StateTaskType = {
     [key: string]: TaskType[]
@@ -84,6 +90,9 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: Ac
                 return newState[todol.id] = []
             })
             return newState
+        }
+        case "DELETE-DATA":{
+            return {}
         }
 
         default:

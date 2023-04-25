@@ -1,8 +1,9 @@
 import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
-import {errorShowAC, setLoadingAC} from "./appReducer";
+import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
+import {setTasks} from "./TasksReducer";
 
 
 export type ActionTodolistType =
@@ -12,6 +13,7 @@ export type ActionTodolistType =
     | deleteTodolistACType
     | setTodolistsACType
     | changeDisabledStatusACType
+    | deleteDataWhenLogOutACType
 
 const initialTodolState: CommonTodolistType[] = []
 
@@ -43,6 +45,9 @@ export const TodolistReducer = (
         case "Todolist/CHANGE-DISABLE-STATUS": {
             return state.map(e => e.id === action.idTodolist
                 ? {...e, disableStatus: action.disableValue} : e)
+        }
+        case "DELETE-DATA":{
+            return []
         }
 
         default :
@@ -104,6 +109,13 @@ export const changeDisabledStatusAC = (idTodolist: string, disableValue: boolean
     } as const
 }
 
+export type deleteDataWhenLogOutACType = ReturnType<typeof deleteDataWhenLogOutAC>
+export const deleteDataWhenLogOutAC = () => {
+    return {
+        type: 'DELETE-DATA'
+    } as const
+}
+
 
 export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
@@ -155,14 +167,19 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
 }
 
 
-export const setTodolists = () => (dispatch: Dispatch) => {
+export const setTodolists = () => (dispatch: any) => {
     dispatch(setLoadingAC('loading'))
     todolistApi.getTodolists()
         .then((respons) => {
             dispatch(setTodolistsAC(respons.data))
             dispatch(setLoadingAC('finishLoading'))
+            return respons.data   /* todolists: TodolistType[]*/
+        })
+        .then((todolArray) => {
+            todolArray.forEach(el => dispatch(setTasks(el.id)))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)
         })
+
 }

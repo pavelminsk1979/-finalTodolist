@@ -3,6 +3,7 @@ import {authApi} from "../api/api";
 import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
 import {LoginDataType} from "../common/types";
+import {deleteDataWhenLogOutAC} from "./TodolistReducer";
 
 const initialStateAuthReducer = {
     isLoggedIn:false
@@ -53,6 +54,7 @@ export const logOutTC = () => (dispatch:Dispatch) => {
             if(response.data.resultCode===0){
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setLoadingAC('finishLoading'))
+                dispatch(deleteDataWhenLogOutAC())
             }
         })
         .catch((error) => {

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback} from "react";
 import {CreateItemForm} from "./CreateItemForm";
 import {EditModeTitle} from "./EditModeTitle";
 import Button from "@mui/material/Button";
@@ -6,8 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "./Task";
 import {CommonTodolistType, FilterType, TaskStatus} from "../common/types";
-import {useAppDispatch} from "../state/store";
-import {setTasks, StateTaskType} from "../state/TasksReducer";
+import { StateTaskType} from "../state/TasksReducer";
 
 type TodolistType = {
     filter: FilterType
@@ -21,7 +20,7 @@ type TodolistType = {
     createTask: (idTodolist: string, text: string) => void
     todolist: CommonTodolistType
     tasks: StateTaskType
-    disableValue:boolean
+    disableValue: boolean
 }
 
 export const Todolist = ({
@@ -32,14 +31,9 @@ export const Todolist = ({
                              createTask,
                              changeCheckboxTask,
                              filter,
-                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask,disableValue
+                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask, disableValue
                          }: TodolistType) => {
 
-    const dispatch = useAppDispatch()
-
-    useEffect(()=>{
-        dispatch(setTasks(todolist.id))
-    },[])
 
     const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
         changeCheckboxTask(todolist.id, idTask, valueCheckbox)
@@ -72,10 +66,10 @@ export const Todolist = ({
     let filterTasks = tasks[todolist.id]
     if (todolist.filter === 'new') {
         filterTasks = filterTasks.filter(
-            task => task.status===TaskStatus.New)
+            task => task.status === TaskStatus.New)
     } else if (todolist.filter === 'completed') {
         filterTasks = filterTasks.filter(
-            task => task.status===TaskStatus.Complete)
+            task => task.status === TaskStatus.Complete)
     }
 
 
