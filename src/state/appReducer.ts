@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {authApi} from "../api/api";
-import {setIsLoggedInAC} from "./authReducer";
 import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
+import {setIsLoggedIn} from "./authReducer";
 
 
 export type LoadingType = 'idle' | 'loading' | 'finishLoading'
@@ -67,7 +67,7 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
     authApi.me()
         .then(response => {
             if (response.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC(true))
+                dispatch(setIsLoggedIn({value:true}))
             }
         })
         .catch((error) => {

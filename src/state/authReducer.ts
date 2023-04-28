@@ -4,41 +4,37 @@ import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
 import {LoginDataType} from "../common/types";
 import {deleteDataWhenLogOutAC} from "./TodolistReducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialStateAuthReducer = {
-    isLoggedIn:false
-}
 
 type initialStateAuthReducerType = {
-    isLoggedIn:boolean
+    isLoggedIn: boolean
+}
+const initialStateAuthReducer: initialStateAuthReducerType = {
+    isLoggedIn: false
 }
 
-type AuthReducerActionType = setIsLoggedInACType
+const slice = createSlice({
+    name: 'auth',
+    initialState: initialStateAuthReducer,
+    reducers: {
+        setIsLoggedIn(state, action: PayloadAction<{value:boolean}>) {
+            state.isLoggedIn = action.payload.value
+        }
+    }
+})
 
-export const authReducer = (state:initialStateAuthReducerType=initialStateAuthReducer,action:AuthReducerActionType):initialStateAuthReducerType => {
-  switch (action.type) {
-      case 'auth/SET-IS-LOGGED-IN':{
-          return {...state,isLoggedIn:action.value}
-      }
-      default:return state
-  }
-}
+export const authReducer = slice.reducer
+export const {setIsLoggedIn} = slice.actions
 
 
-type setIsLoggedInACType = ReturnType<typeof setIsLoggedInAC>
-export const setIsLoggedInAC = (value:boolean) => {
-    return{
-        type:'auth/SET-IS-LOGGED-IN',
-        value
-    }as const
-}
 
-export const loginTC = (data: LoginDataType) => (dispatch:Dispatch) => {
+export const loginTC = (data: LoginDataType) => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
     authApi.logIn(data)
         .then((respons) => {
-            if(respons.data.resultCode===0){
-                dispatch(setIsLoggedInAC(true))
+            if (respons.data.resultCode === 0) {
+                dispatch(setIsLoggedIn({value:true}))
                 dispatch(setLoadingAC('finishLoading'))
             }
         })
@@ -47,12 +43,12 @@ export const loginTC = (data: LoginDataType) => (dispatch:Dispatch) => {
         })
 }
 
-export const logOutTC = () => (dispatch:Dispatch) => {
+export const logOutTC = () => (dispatch: Dispatch) => {
     dispatch(setLoadingAC('loading'))
     authApi.logOut()
-        .then((response)=>{
-            if(response.data.resultCode===0){
-                dispatch(setIsLoggedInAC(false))
+        .then((response) => {
+            if (response.data.resultCode === 0) {
+                dispatch(setIsLoggedIn({value:false}))
                 dispatch(setLoadingAC('finishLoading'))
                 dispatch(deleteDataWhenLogOutAC())
             }
