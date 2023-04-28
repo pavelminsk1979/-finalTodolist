@@ -1,17 +1,25 @@
-import {errorShowAC, setLoadingAC} from "../state/appReducer";
+
+
+
 import {Dispatch} from "redux";
+import {appActions} from "../state/appReducer";
 
 
 export const utilsFanctionForMethodCatch = (message:string,dispatch:Dispatch) => {
-    dispatch(setLoadingAC('finishLoading'))
-    dispatch(errorShowAC(message))
+    dispatch(appActions.setLoading(
+        {valueLoading:'finishLoading'}))
+    dispatch(appActions.errorShow(
+        {errorText:message}))
 }
 
 export const utilsFanctionForShowError = (messages:string[],dispatch:Dispatch) => {
     if (messages.length) {
-        dispatch(errorShowAC(messages[0]))
+        dispatch(appActions.errorShow(
+            {errorText:messages[0]}))
     } else {
-        dispatch(errorShowAC('Some error'))
+        dispatch(appActions.errorShow(
+            {errorText:'Some error'}))
     }
-    dispatch(setLoadingAC('finishLoading'))
+    dispatch(appActions.setLoading(
+        {valueLoading:'finishLoading'}))
 }

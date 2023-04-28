@@ -1,9 +1,9 @@
 import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
-import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 import {setTasks} from "./TasksReducer";
+import {appActions} from "./appReducer";
 
 
 export type ActionTodolistType =
@@ -118,12 +118,13 @@ export const deleteDataWhenLogOutAC = () => {
 
 
 export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     todolistApi.updateTodolist(idTodolist, editTitle)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
                 dispatch(changeTitleTodolistAC(idTodolist, editTitle))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
             } else {
                 utilsFanctionForShowError(respons.data.messages, dispatch)
             }
@@ -136,12 +137,13 @@ export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => 
 
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     dispatch(changeDisabledStatusAC(idTodolist, true))
     todolistApi.deleteTodolist(idTodolist)
         .then((respons) => {
             dispatch(deleteTodolistAC(idTodolist))
-            dispatch(setLoadingAC('finishLoading'))
+            dispatch(appActions.setLoading(
+                {valueLoading:'finishLoading'}))
             dispatch(changeDisabledStatusAC(idTodolist, false))
         })
         .catch((error) => {
@@ -150,13 +152,14 @@ export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => 
 }
 
 export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     todolistApi.createTodolist(text)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
                 dispatch(createTodolistAC(
                     respons.data.data.item.id, text))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
             } else {
                 utilsFanctionForShowError(respons.data.messages, dispatch)
             }
@@ -168,11 +171,12 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
 
 
 export const setTodolists = () => (dispatch: any) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     todolistApi.getTodolists()
         .then((respons) => {
             dispatch(setTodolistsAC(respons.data))
-            dispatch(setLoadingAC('finishLoading'))
+            dispatch(appActions.setLoading(
+                {valueLoading:'finishLoading'}))
             return respons.data   /* todolists: TodolistType[]*/
         })
         .then((todolArray) => {

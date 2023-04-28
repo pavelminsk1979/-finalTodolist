@@ -8,8 +8,8 @@ import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
-import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
+import {appActions} from "./appReducer";
 
 
 export type ActionTaskType =
@@ -165,7 +165,7 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
         value = TaskStatus.New
     }
     if (task) {
-        dispatch(setLoadingAC('loading'))
+        dispatch(appActions.setLoading({valueLoading:'loading'}))
         taskApi.updateCheckboxTask(idTodolist, idTask, {
             title: task.title,
             description: task.description,
@@ -176,7 +176,8 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
         })
             .then((respons) => {
                 dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
             })
             .catch((error) => {
                 utilsFanctionForMethodCatch(error.message, dispatch)
@@ -192,7 +193,7 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
     const taskForCorrectTodolist = allTasks[idTodolist]
     const task = taskForCorrectTodolist.find(e => e.id === idTask)
     if (task) {
-        dispatch(setLoadingAC('loading'))
+        dispatch(appActions.setLoading({valueLoading:'loading'}))
         taskApi.updateTask(idTodolist, idTask, {
             title: editTitle,
             description: task.description,
@@ -204,7 +205,8 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
             .then((respons) => {
                 if (respons.data.resultCode === 0) {
                     dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
-                    dispatch(setLoadingAC('finishLoading'))
+                    dispatch(appActions.setLoading(
+                        {valueLoading:'finishLoading'}))
                 } else {
                     utilsFanctionForShowError(
                         respons.data.messages, dispatch)
@@ -219,13 +221,14 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
 
 export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
                 dispatch(createTaskAC(
                     idTodolist, text, respons.data.data.item.id))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
             } else {
                 utilsFanctionForShowError(
                     respons.data.messages, dispatch)
@@ -239,11 +242,12 @@ export const createTaskTC = (idTodolist: string, text: string) => (
 
 export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     taskApi.deleteTask(idTodolist, idTask)
         .then((respons) => {
             dispatch(deleteTaskAC(idTodolist, idTask))
-            dispatch(setLoadingAC('finishLoading'))
+            dispatch(appActions.setLoading(
+                {valueLoading:'finishLoading'}))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)
@@ -252,11 +256,12 @@ export const deleteTaskTC = (idTodolist: string, idTask: string) => (
 
 
 export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     taskApi.getTasks(todolistId)
         .then((respons) => {
             dispatch(setTaskAC(todolistId, respons.data.items))
-            dispatch(setLoadingAC('finishLoading'))
+            dispatch(appActions.setLoading(
+                {valueLoading:'finishLoading'}))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)

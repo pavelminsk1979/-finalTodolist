@@ -20,7 +20,6 @@ export const store = configureStore({
     reducer:rootReducer
 })
 
-/*export const store = legacy_createStore(rootReducer,applyMiddleware(thunk))*/
 
 export type StateStoreType = ReturnType<typeof rootReducer>
 

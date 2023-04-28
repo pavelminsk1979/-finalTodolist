@@ -1,10 +1,10 @@
 import {Dispatch} from "redux";
 import {authApi} from "../api/api";
-import {setLoadingAC} from "./appReducer";
 import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
 import {LoginDataType} from "../common/types";
 import {deleteDataWhenLogOutAC} from "./TodolistReducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {appActions} from "./appReducer";
 
 
 type initialStateAuthReducerType = {
@@ -25,17 +25,18 @@ const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
-export const {setIsLoggedIn} = slice.actions
+export const authActions = slice.actions
 
 
 
 export const loginTC = (data: LoginDataType) => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     authApi.logIn(data)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
-                dispatch(setIsLoggedIn({value:true}))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(authActions.setIsLoggedIn({value:true}))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
             }
         })
         .catch((error) => {
@@ -44,12 +45,13 @@ export const loginTC = (data: LoginDataType) => (dispatch: Dispatch) => {
 }
 
 export const logOutTC = () => (dispatch: Dispatch) => {
-    dispatch(setLoadingAC('loading'))
+    dispatch(appActions.setLoading({valueLoading:'loading'}))
     authApi.logOut()
         .then((response) => {
             if (response.data.resultCode === 0) {
-                dispatch(setIsLoggedIn({value:false}))
-                dispatch(setLoadingAC('finishLoading'))
+                dispatch(authActions.setIsLoggedIn({value:false}))
+                dispatch(appActions.setLoading(
+                    {valueLoading:'finishLoading'}))
                 dispatch(deleteDataWhenLogOutAC())
             }
         })
