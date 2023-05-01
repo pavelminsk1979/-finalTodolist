@@ -1,9 +1,4 @@
-import {
-    createTodolistACType,
-    deleteDataWhenLogOutACType,
-    deleteTodolistACType,
-    setTodolistsACType
-} from "./TodolistReducer";
+
 import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
 import {TaskStatus, TaskType} from "../common/types";
@@ -12,7 +7,7 @@ import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/u
 import {appActions} from "./appReducer";
 
 
-export type ActionTaskType =
+/*export type ActionTaskType =
     changeTitleTaskACType
     | createTaskACType
     | changeCheckboxTaskACType
@@ -21,7 +16,7 @@ export type ActionTaskType =
     | deleteTodolistACType
     | setTodolistsACType
     | setTaskACType
-    | deleteDataWhenLogOutACType
+    | deleteDataWhenLogOutACType*/
 
 export type StateTaskType = {
     [key: string]: TaskType[]
@@ -29,7 +24,7 @@ export type StateTaskType = {
 
 const initialTaskState: StateTaskType = {}
 
-export const TasksReducer = (state: StateTaskType = initialTaskState, action: ActionTaskType): StateTaskType => {
+export const TasksReducer = (state: StateTaskType = initialTaskState, action: any): StateTaskType => {
     switch (action.type) {
         case "Task/SET-TASKS": {
             let copyStateTasks = {...state}

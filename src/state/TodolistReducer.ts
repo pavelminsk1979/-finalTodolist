@@ -4,127 +4,75 @@ import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 import {setTasks} from "./TasksReducer";
 import {appActions} from "./appReducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-
-export type ActionTodolistType =
-    changeTitleTodolistACType
-    | createTodolistACType
-    | filterTodolistACType
-    | deleteTodolistACType
-    | setTodolistsACType
-    | changeDisabledStatusACType
-    | deleteDataWhenLogOutACType
 
 const initialTodolState: CommonTodolistType[] = []
 
-export const TodolistReducer = (
-    state: CommonTodolistType[] = initialTodolState, action: ActionTodolistType): CommonTodolistType[] => {
-    switch (action.type) {
-        case 'Todolist/CHANGE-TITLE': {
-            return state.map(e => e.id === action.idTodolist ? {...e, title: action.editTitle} : e)
-        }
-        case "Todolist/CREATE-TODOLIST": {
-            return [{
-                id: action.idTodolist,
-                title: action.text,
-                filter: 'all',
-                addedData: '',
-                order: 0,
-                disableStatus: false
-            }, ...state]
-        }
-        case "Todolist/CHANGE-FILTER-VALUE": {
-            return state.map(e => e.id === action.idTodolist ? {...e, filter: action.valueFilter} : e)
-        }
-        case "Todolist/DELETE-TODOLIST": {
-            return state.filter(e => e.id !== action.idTodolist)
-        }
-        case "Todolist/SET-TODOLISTS": {
-            return action.todolists.map(e => ({...e, filter: 'all', disableStatus: false}))
-        }
-        case "Todolist/CHANGE-DISABLE-STATUS": {
-            return state.map(e => e.id === action.idTodolist
-                ? {...e, disableStatus: action.disableValue} : e)
-        }
-        case "DELETE-DATA":{
-            return []
-        }
 
-        default :
-            return state
+const slice = createSlice({
+    name: 'todo',
+    initialState: initialTodolState,
+    reducers: {
+        deleteTodolist(state, action: PayloadAction<{ idTodolist: string }>) {
+            const index = state.findIndex(el => el.id === action.payload.idTodolist)
+            if (index > -1) {
+                state.splice(index, 1)
+            }
+        },
+        createTodolist(state, action: PayloadAction<{
+            todolist: TodolistType
+        }>) {
+            const newTodolist: CommonTodolistType = {...action.payload.todolist, filter: 'all', disableStatus: false}
+            state.unshift(newTodolist)
+        },
+        changeTitleTodolist(state, action: PayloadAction<{
+            idTodolist: string, editTitle: string
+        }>) {
+            const index = state.findIndex(el => el.id === action.payload.idTodolist)
+            state[index].title = action.payload.editTitle
+        },
+        filterTodolist(state, action: PayloadAction<{
+            idTodolist: string, valueFilter: FilterType
+        }>) {
+            const todolist = state.find(todol => todol.id === action.payload.idTodolist)
+            if (todolist) {
+                todolist.filter = action.payload.valueFilter
+            }
+        },
+        changeDisabledStatus(state, action: PayloadAction<{
+            idTodolist: string, disableValue: boolean
+        }>) {
+            const index = state.findIndex(el => el.id === action.payload.idTodolist)
+            state[index].disableStatus = action.payload.disableValue
+        },
+        setTodolists(state, action: PayloadAction<{
+            todolists: TodolistType[]
+        }>) {
+            return action.payload.todolists.map(el => {
+                return {...el, filter: 'all', disableStatus: false}
+            })
+        },
+        deleteDataWhenLogOut(state, action: PayloadAction<{}>) {
+            state = []
+        },
     }
-}
+})
 
-export type deleteTodolistACType = ReturnType<typeof deleteTodolistAC>
-export const deleteTodolistAC = (idTodolist: string) => {
-    return {
-        type: 'Todolist/DELETE-TODOLIST',
-        idTodolist,
-    } as const
-}
+export const todolistReducer = slice.reducer
 
+export const todolActions = slice.actions
 
-type filterTodolistACType = ReturnType<typeof filterTodolistAC>
-export const filterTodolistAC = (idTodolist: string, valueFilter: FilterType) => {
-    return {
-        type: 'Todolist/CHANGE-FILTER-VALUE',
-        idTodolist,
-        valueFilter
-    } as const
-}
-
-
-export type createTodolistACType = ReturnType<typeof createTodolistAC>
-export const createTodolistAC = (idTodolist: string, text: string) => {
-    return {
-        type: 'Todolist/CREATE-TODOLIST',
-        text,
-        idTodolist
-    } as const
-}
-
-type changeTitleTodolistACType = ReturnType<typeof changeTitleTodolistAC>
-export const changeTitleTodolistAC = (idTodolist: string, editTitle: string) => {
-    return {
-        type: 'Todolist/CHANGE-TITLE',
-        idTodolist,
-        editTitle
-    } as const
-}
-
-export type setTodolistsACType = ReturnType<typeof setTodolistsAC>
-export const setTodolistsAC = (todolists: TodolistType[]) => {
-    return {
-        type: 'Todolist/SET-TODOLISTS',
-        todolists
-    } as const
-}
-
-export type changeDisabledStatusACType = ReturnType<typeof changeDisabledStatusAC>
-export const changeDisabledStatusAC = (idTodolist: string, disableValue: boolean) => {
-    return {
-        type: 'Todolist/CHANGE-DISABLE-STATUS',
-        idTodolist,
-        disableValue
-    } as const
-}
-
-export type deleteDataWhenLogOutACType = ReturnType<typeof deleteDataWhenLogOutAC>
-export const deleteDataWhenLogOutAC = () => {
-    return {
-        type: 'DELETE-DATA'
-    } as const
-}
 
 
 export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     todolistApi.updateTodolist(idTodolist, editTitle)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
-                dispatch(changeTitleTodolistAC(idTodolist, editTitle))
+                dispatch(todolActions.changeTitleTodolist({idTodolist, editTitle}))
                 dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
+                    {valueLoading: 'finishLoading'}))
             } else {
                 utilsFanctionForShowError(respons.data.messages, dispatch)
             }
@@ -137,14 +85,15 @@ export const changeTitleTodolistTC = (idTodolist: string, editTitle: string) => 
 
 
 export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
-    dispatch(changeDisabledStatusAC(idTodolist, true))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
+    dispatch(todolActions.changeDisabledStatus({idTodolist,disableValue:true}))
     todolistApi.deleteTodolist(idTodolist)
         .then((respons) => {
-            dispatch(deleteTodolistAC(idTodolist))
+            dispatch(todolActions.deleteTodolist({idTodolist}))
             dispatch(appActions.setLoading(
-                {valueLoading:'finishLoading'}))
-            dispatch(changeDisabledStatusAC(idTodolist, false))
+                {valueLoading: 'finishLoading'}))
+            dispatch(todolActions.changeDisabledStatus(
+                {idTodolist,disableValue:false}))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)
@@ -152,14 +101,14 @@ export const deleteTodolistTC = (idTodolist: string) => (dispatch: Dispatch) => 
 }
 
 export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     todolistApi.createTodolist(text)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
-                dispatch(createTodolistAC(
-                    respons.data.data.item.id, text))
+                dispatch(todolActions.createTodolist(
+                    {todolist:respons.data.data.item}))
                 dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
+                    {valueLoading: 'finishLoading'}))
             } else {
                 utilsFanctionForShowError(respons.data.messages, dispatch)
             }
@@ -171,12 +120,12 @@ export const createTodolistTC = (text: string) => (dispatch: Dispatch) => {
 
 
 export const setTodolists = () => (dispatch: any) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     todolistApi.getTodolists()
         .then((respons) => {
-            dispatch(setTodolistsAC(respons.data))
+            dispatch(todolActions.setTodolists({todolists:respons.data}))
             dispatch(appActions.setLoading(
-                {valueLoading:'finishLoading'}))
+                {valueLoading: 'finishLoading'}))
             return respons.data   /* todolists: TodolistType[]*/
         })
         .then((todolArray) => {
