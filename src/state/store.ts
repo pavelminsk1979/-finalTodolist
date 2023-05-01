@@ -1,19 +1,20 @@
 
 import {combineReducers} from "redux";
-import {TasksReducer} from "./TasksReducer";
+import {tasksReducer, TasksReducer} from "./TasksReducer";
 import {useDispatch} from "react-redux";
 import  {ThunkDispatch} from "redux-thunk";
 import { appReducer} from "./appReducer";
 import {authReducer} from "./authReducer";
 import {todolistReducer} from "./TodolistReducer";
 import {configureStore} from "@reduxjs/toolkit";
+import {TaskType} from "../common/types";
 
 
 
 
 const rootReducer = combineReducers({
     todolists:todolistReducer,
-    tasks:TasksReducer,
+    tasks:tasksReducer,
     app:appReducer,
     auth:authReducer
 })
@@ -32,5 +33,13 @@ export const useAppDispatch = ()=>useDispatch<DispatchType>()
 
 /* @ts-ignore */
 window.store = store
+
+
+
+
+
+
+
+
 
 

@@ -1,22 +1,11 @@
-
 import {Dispatch} from "redux";
 import {taskApi} from "../api/api";
-import {TaskStatus, TaskType} from "../common/types";
+import {PayloadTaskType, TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 import {appActions} from "./appReducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-
-/*export type ActionTaskType =
-    changeTitleTaskACType
-    | createTaskACType
-    | changeCheckboxTaskACType
-    | deleteTaskACType
-    | createTodolistACType
-    | deleteTodolistACType
-    | setTodolistsACType
-    | setTaskACType
-    | deleteDataWhenLogOutACType*/
 
 export type StateTaskType = {
     [key: string]: TaskType[]
@@ -24,54 +13,56 @@ export type StateTaskType = {
 
 const initialTaskState: StateTaskType = {}
 
+
+const slice = createSlice({
+    name: 'tasks',
+    initialState: initialTaskState,
+    reducers: {
+        deleteTask(state, action: PayloadAction<{
+            idTodolist: string, idTask: string
+        }>) {
+            const tasks = state[action.payload.idTodolist]
+            const index = tasks.findIndex(t => t.id === action.payload.idTask)
+            if (index > -1) {
+                tasks.splice(index, 1)
+            }
+        },
+        createTask(state, action: PayloadAction<{ task: TaskType }>) {
+            state[action.payload.task.todoListId].unshift(action.payload.task)
+        },
+        changeTitleTask(state, action: PayloadAction<{
+            idTodolist: string, idTask: string, item: PayloadTaskType
+        }>) {
+            const tasks = state[action.payload.idTodolist]
+            const index = tasks.findIndex(t => t.id === action.payload.idTask)
+            if (index > -1) {
+                tasks[index] = {...tasks[index], ...action.payload.item}
+            }
+        },
+        changeCheckboxTask(state, action: PayloadAction<{
+            idTodolist: string, idTask: string, item: PayloadTaskType
+        }>) {
+            const tasks = state[action.payload.idTodolist]
+            const index = tasks.findIndex(t => t.id === action.payload.idTask)
+            if (index > -1) {
+                tasks[index] = {...tasks[index], ...action.payload.item}
+            }
+        },
+        setTask(state, action: PayloadAction<{ todolistId: string, tasks: TaskType[] }>) {
+            state[action.payload.todolistId]=action.payload.tasks
+        }
+    }
+})
+
+
+export const tasksReducer = slice.reducer
+
+export const taskActions = slice.actions
+
+
+
 export const TasksReducer = (state: StateTaskType = initialTaskState, action: any): StateTaskType => {
     switch (action.type) {
-        case "Task/SET-TASKS": {
-            let copyStateTasks = {...state}
-            copyStateTasks[action.idTodolist] = action.tasks
-            return copyStateTasks
-        }
-
-        case 'Task/CHANGE-TITLE' : {
-            return {
-                ...state, [action.idTodolist]: state[action.idTodolist].map(
-                    e => e.id === action.idTask ? {...e, title: action.editTitle} : e)
-            }
-        }
-        case "Task/CREATE-TASK": {
-            return {
-                ...state, [action.idTodolist]: [
-                    {
-                        description: '',
-                        title: action.text,
-                        status: TaskStatus.New,
-                        priority: 0,
-                        startDate: '',
-                        deadline: '',
-                        id: action.idTask,
-                        todoListId: action.idTodolist,
-                        order: 0,
-                        addedDate: ''
-                    }, ...state[action.idTodolist]
-                ]
-            }
-        }
-
-        case "Task/CHANGE-CHECKBOX": {
-            return {
-                ...state, [action.idTodolist]: state[action.idTodolist].map(
-                    e => e.id === action.idTask ? {...e, status: action.value} : e
-                )
-            }
-        }
-
-        case "Task/DELETE-TASK": {
-            return {
-                ...state, [action.idTodolist]: state[action.idTodolist].filter(
-                    e => e.id !== action.idTask
-                )
-            }
-        }
         case "Todolist/CREATE-TODOLIST": {
             return {[action.idTodolist]: [], ...state}
         }
@@ -81,12 +72,12 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: an
         }
         case "Todolist/SET-TODOLISTS": {
             let newState = {...state}
-            action.todolists.map(todol => {
+            action.todolists.map((todol:any) => {
                 return newState[todol.id] = []
             })
             return newState
         }
-        case "DELETE-DATA":{
+        case "DELETE-DATA": {
             return {}
         }
 
@@ -96,55 +87,6 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: an
 }
 
 
-type deleteTaskACType = ReturnType<typeof deleteTaskAC>
-export const deleteTaskAC = (idTodolist: string, idTask: string) => {
-    return {
-        type: 'Task/DELETE-TASK',
-        idTodolist,
-        idTask
-    } as const
-}
-
-
-type changeCheckboxTaskACType = ReturnType<typeof changeCheckboxTaskAC>
-export const changeCheckboxTaskAC = (idTodolist: string, idTask: string, value: number) => {
-    return {
-        type: 'Task/CHANGE-CHECKBOX',
-        idTodolist,
-        idTask,
-        value
-    } as const
-}
-
-
-type createTaskACType = ReturnType<typeof createTaskAC>
-export const createTaskAC = (idTodolist: string, text: string, idTask: string) => {
-    return {
-        type: 'Task/CREATE-TASK',
-        idTodolist,
-        text,
-        idTask
-    } as const
-}
-
-type changeTitleTaskACType = ReturnType<typeof changeTitleTaskAC>
-export const changeTitleTaskAC = (idTodolist: string, idTask: string, editTitle: string) => {
-    return {
-        type: 'Task/CHANGE-TITLE',
-        idTodolist,
-        idTask,
-        editTitle,
-    } as const
-}
-
-type setTaskACType = ReturnType<typeof setTaskAC>
-export const setTaskAC = (idTodolist: string, tasks: TaskType[]) => {
-    return {
-        type: 'Task/SET-TASKS',
-        idTodolist,
-        tasks,
-    } as const
-}
 
 
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
@@ -160,7 +102,7 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
         value = TaskStatus.New
     }
     if (task) {
-        dispatch(appActions.setLoading({valueLoading:'loading'}))
+        dispatch(appActions.setLoading({valueLoading: 'loading'}))
         taskApi.updateCheckboxTask(idTodolist, idTask, {
             title: task.title,
             description: task.description,
@@ -170,9 +112,10 @@ export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCh
             deadline: task.deadline
         })
             .then((respons) => {
-                dispatch(changeCheckboxTaskAC(idTodolist, idTask, value))
+                dispatch(taskActions.changeCheckboxTask(
+                    {idTodolist, idTask, item: respons.data.data.item}))
                 dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
+                    {valueLoading: 'finishLoading'}))
             })
             .catch((error) => {
                 utilsFanctionForMethodCatch(error.message, dispatch)
@@ -188,7 +131,7 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
     const taskForCorrectTodolist = allTasks[idTodolist]
     const task = taskForCorrectTodolist.find(e => e.id === idTask)
     if (task) {
-        dispatch(appActions.setLoading({valueLoading:'loading'}))
+        dispatch(appActions.setLoading({valueLoading: 'loading'}))
         taskApi.updateTask(idTodolist, idTask, {
             title: editTitle,
             description: task.description,
@@ -199,9 +142,10 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
         })
             .then((respons) => {
                 if (respons.data.resultCode === 0) {
-                    dispatch(changeTitleTaskAC(idTodolist, idTask, editTitle))
+                    dispatch(taskActions.changeTitleTask(
+                        {idTodolist, idTask, item: respons.data.data.item}))
                     dispatch(appActions.setLoading(
-                        {valueLoading:'finishLoading'}))
+                        {valueLoading: 'finishLoading'}))
                 } else {
                     utilsFanctionForShowError(
                         respons.data.messages, dispatch)
@@ -216,14 +160,13 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
 
 export const createTaskTC = (idTodolist: string, text: string) => (
     dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
-                dispatch(createTaskAC(
-                    idTodolist, text, respons.data.data.item.id))
+                dispatch(taskActions.createTask({task:respons.data.data.item}))
                 dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
+                    {valueLoading: 'finishLoading'}))
             } else {
                 utilsFanctionForShowError(
                     respons.data.messages, dispatch)
@@ -237,12 +180,12 @@ export const createTaskTC = (idTodolist: string, text: string) => (
 
 export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     taskApi.deleteTask(idTodolist, idTask)
         .then((respons) => {
-            dispatch(deleteTaskAC(idTodolist, idTask))
+            dispatch(taskActions.deleteTask({idTodolist, idTask}))
             dispatch(appActions.setLoading(
-                {valueLoading:'finishLoading'}))
+                {valueLoading: 'finishLoading'}))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)
@@ -251,12 +194,12 @@ export const deleteTaskTC = (idTodolist: string, idTask: string) => (
 
 
 export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading:'loading'}))
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
     taskApi.getTasks(todolistId)
         .then((respons) => {
-            dispatch(setTaskAC(todolistId, respons.data.items))
+            dispatch(taskActions.setTask({todolistId,tasks: respons.data.items}))
             dispatch(appActions.setLoading(
-                {valueLoading:'finishLoading'}))
+                {valueLoading: 'finishLoading'}))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)
