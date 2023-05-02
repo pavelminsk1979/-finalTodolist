@@ -61,7 +61,7 @@ export const taskActions = slice.actions
 
 
 
-export const TasksReducer = (state: StateTaskType = initialTaskState, action: any): StateTaskType => {
+/*export const TasksReducer = (state: StateTaskType = initialTaskState, action: any): StateTaskType => {
     switch (action.type) {
         case "Todolist/CREATE-TODOLIST": {
             return {[action.idTodolist]: [], ...state}
@@ -84,7 +84,7 @@ export const TasksReducer = (state: StateTaskType = initialTaskState, action: an
         default:
             return state
     }
-}
+}*/
 
 
 

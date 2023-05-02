@@ -14,7 +14,7 @@ import {
 import {
     changeTitleTodolistTC,
     createTodolistTC, deleteTodolistTC,
-    filterTodolistAC, setTodolists
+    setTodolists, todolActions
 } from "../state/TodolistReducer";
 import {useSelector} from "react-redux";
 import {StateStoreType, useAppDispatch} from "../state/store";
@@ -25,7 +25,7 @@ import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
 
 
- export function RootTodolist () {
+export function RootTodolist() {
 
 
     const dispatch = useAppDispatch()
@@ -36,19 +36,24 @@ import {Navigate} from "react-router-dom";
     const todolists = useSelector<StateStoreType, CommonTodolistType[]>(
         state => state.todolists)
 
-    const statusLoading = useSelector<StateStoreType,LoadingType>(
+    const statusLoading = useSelector<StateStoreType, LoadingType>(
         state => state.app.statusLoading
     )
-     const isLoggedIn = useSelector<StateStoreType,boolean>(
-         state => state.auth.isLoggedIn)
+    const isLoggedIn = useSelector<StateStoreType, boolean>(
+        state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        if(!isLoggedIn){return}
+        if (!isLoggedIn) {
+            return
+        }
         dispatch(setTodolists())
     }, [])
 
     const filterTodolist = (idTodolist: string, valueFilter: FilterType) => {
-        dispatch(filterTodolistAC(idTodolist, valueFilter))
+        dispatch(todolActions.filterTodolist({
+            idTodolist: idTodolist,
+            valueFilter: valueFilter
+        }))
     }
 
     const deleteTodolist = (idTodolist: string) => {
@@ -82,15 +87,15 @@ import {Navigate} from "react-router-dom";
         dispatch(deleteTaskTC(idTodolist, idTask))
     }
 
-     if(!isLoggedIn){
-         return <Navigate to={'/login'}/>
-     }
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
 
     return (
         <div>
-            {statusLoading==='loading'&&<LinearProgress
-                color="secondary" />}
+            {statusLoading === 'loading' && <LinearProgress
+                color="secondary"/>}
             <ErrorSnackbar/>
             <Container>
                 <Grid container style={{padding: '20px'}}>
