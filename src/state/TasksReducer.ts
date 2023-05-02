@@ -5,6 +5,7 @@ import {StateStoreType} from "./store";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 import {appActions} from "./appReducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {todolActions} from "./TodolistReducer";
 
 
 export type StateTaskType = {
@@ -51,7 +52,23 @@ const slice = createSlice({
         setTask(state, action: PayloadAction<{ todolistId: string, tasks: TaskType[] }>) {
             state[action.payload.todolistId]=action.payload.tasks
         }
-    }
+    },
+    extraReducers : builder => {
+        builder.addCase(todolActions.createTodolist,(state,action)=>{
+            state[action.payload.todolist.id] = []
+        })
+        builder.addCase(todolActions.deleteTodolist, (state, actoin) => {
+            delete state[actoin.payload.idTodolist]
+        })
+        builder.addCase(todolActions.deleteDataWhenLogOut,(state,action)=>{
+            state = {}
+        })
+        builder.addCase(todolActions.setTodolists, (state, actoin) => {
+            actoin.payload.todolists.forEach((el: any) => {
+                state[el.id] = []
+            })
+    })
+}
 })
 
 
