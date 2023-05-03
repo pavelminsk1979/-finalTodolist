@@ -8,10 +8,11 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
-import {StateStoreType, useAppDispatch} from "../state/store";
+import { useAppDispatch} from "../state/store";
 import {loginTC} from "../state/authReducer";
 import {useSelector} from "react-redux";
 import { Navigate } from 'react-router-dom';
+import {selectIsIsLoggedIn} from "../state/authSelectors";
 
 
 
@@ -23,8 +24,7 @@ import { Navigate } from 'react-router-dom';
 
 export const Login = () => {
     const dispatch = useAppDispatch()
-    const isLoggedIn = useSelector<StateStoreType,boolean>(
-        state => state.auth.isLoggedIn)
+    const isLoggedIn = useSelector(selectIsIsLoggedIn)
 
     const formik = useFormik({
         initialValues: {

@@ -3,19 +3,18 @@ import PrimarySearchAppBar from "./AppBar";
 import {RootTodolist} from "./RootTodolist";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "./Login";
-import {StateStoreType, useAppDispatch} from "../state/store";
+import {useAppDispatch} from "../state/store";
 import {initializeAppTC} from "../state/appReducer";
 import {useSelector} from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
+import {selectIsInitialized} from "../state/appSelectors";
 
 
 function App() {
 
     const dispatch = useAppDispatch()
 
-    const isInitialized = useSelector<StateStoreType,boolean>(
-        state => state.app.isInitialized
-    )
+    const isInitialized = useSelector(selectIsInitialized)
 
     useEffect(() => {
         dispatch(initializeAppTC())

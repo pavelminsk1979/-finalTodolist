@@ -61,10 +61,10 @@ test('correct todolist should be removed', () => {
 
 
 test('correct todolist should be change title', () => {
-    const editTitle = "I'm New Title"
     const endState = todolistReducer(
         startState, todolActions.changeTitleTodolist({
-            idTodolist: 'todolistId1', editTitle: editTitle
+            idTodolist: 'todolistId1',
+            editTitle: "I'm New Title"
         }))
 
 

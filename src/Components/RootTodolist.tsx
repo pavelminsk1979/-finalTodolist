@@ -8,8 +8,7 @@ import {
     changeCheckboxTaskTC,
     changeTitleTaskTC,
     createTaskTC,
-    deleteTaskTC,
-    StateTaskType
+    deleteTaskTC
 } from "../state/TasksReducer";
 import {
     changeTitleTodolistTC,
@@ -17,12 +16,15 @@ import {
     setTodolists, todolActions
 } from "../state/TodolistReducer";
 import {useSelector} from "react-redux";
-import {StateStoreType, useAppDispatch} from "../state/store";
-import {CommonTodolistType, FilterType} from "../common/types";
+import { useAppDispatch} from "../state/store";
+import { FilterType} from "../common/types";
 import LinearProgress from "@mui/material/LinearProgress";
-import {LoadingType} from "../state/appReducer";
 import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
+import {selectStatusLoading} from "../state/appSelectors";
+import {selectIsIsLoggedIn} from "../state/authSelectors";
+import {selectTasks} from "../state/taskSelectors";
+import {selectTodolists} from "../state/todolistsSelectors";
 
 
 export function RootTodolist() {
@@ -30,17 +32,13 @@ export function RootTodolist() {
 
     const dispatch = useAppDispatch()
 
-    const tasks = useSelector<StateStoreType, StateTaskType>(
-        state => state.tasks)
+    const tasks = useSelector(selectTasks)
 
-    const todolists = useSelector<StateStoreType, CommonTodolistType[]>(
-        state => state.todolists)
+    const todolists = useSelector(selectTodolists)
 
-    const statusLoading = useSelector<StateStoreType, LoadingType>(
-        state => state.app.statusLoading
-    )
-    const isLoggedIn = useSelector<StateStoreType, boolean>(
-        state => state.auth.isLoggedIn)
+    const statusLoading = useSelector(selectStatusLoading)
+
+    const isLoggedIn = useSelector(selectIsIsLoggedIn)
 
     useEffect(() => {
         if (!isLoggedIn) {

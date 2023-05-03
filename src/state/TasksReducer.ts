@@ -78,33 +78,6 @@ export const taskActions = slice.actions
 
 
 
-/*export const TasksReducer = (state: StateTaskType = initialTaskState, action: any): StateTaskType => {
-    switch (action.type) {
-        case "Todolist/CREATE-TODOLIST": {
-            return {[action.idTodolist]: [], ...state}
-        }
-        case "Todolist/DELETE-TODOLIST": {
-            delete state[action.idTodolist]
-            return {...state}
-        }
-        case "Todolist/SET-TODOLISTS": {
-            let newState = {...state}
-            action.todolists.map((todol:any) => {
-                return newState[todol.id] = []
-            })
-            return newState
-        }
-        case "DELETE-DATA": {
-            return {}
-        }
-
-        default:
-            return state
-    }
-}*/
-
-
-
 
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
     dispatch: Dispatch, getState: () => StateStoreType) => {
