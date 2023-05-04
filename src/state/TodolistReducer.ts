@@ -2,9 +2,9 @@ import {Dispatch} from "redux";
 import {todolistApi} from "../api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "../common/types";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
-import {setTasks} from "./TasksReducer";
 import {appActions} from "./appReducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {taskThunks} from "./TasksReducer";
 
 
 const initialTodolState: CommonTodolistType[] = []
@@ -129,7 +129,7 @@ export const setTodolists = () => (dispatch: any) => {
             return respons.data   /* todolists: TodolistType[]*/
         })
         .then((todolArray) => {
-            todolArray.forEach(el => dispatch(setTasks(el.id)))
+            todolArray.forEach(el => dispatch(taskThunks.setTasks(el.id)))
         })
         .catch((error) => {
             utilsFanctionForMethodCatch(error.message, dispatch)

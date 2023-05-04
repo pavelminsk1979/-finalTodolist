@@ -4,7 +4,7 @@ import {PayloadTaskType, TaskStatus, TaskType} from "../common/types";
 import {StateStoreType} from "./store";
 import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
 import {appActions} from "./appReducer";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {todolActions} from "./TodolistReducer";
 
 
@@ -13,6 +13,16 @@ export type StateTaskType = {
 }
 
 const initialTaskState: StateTaskType = {}
+
+
+const setTasks = createAsyncThunk('tasks/setTasks',
+    async (todolistId: string, thunAPI) => {
+        thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+        const respons = await taskApi.getTasks(todolistId)
+        thunAPI.dispatch(appActions.setLoading(
+            {valueLoading: 'finishLoading'}))
+        return {todolistId, tasks: respons.data.items}
+    })
 
 
 const slice = createSlice({
@@ -48,27 +58,27 @@ const slice = createSlice({
             if (index > -1) {
                 tasks[index] = {...tasks[index], ...action.payload.item}
             }
-        },
-        setTask(state, action: PayloadAction<{ todolistId: string, tasks: TaskType[] }>) {
-            state[action.payload.todolistId]=action.payload.tasks
         }
     },
-    extraReducers : builder => {
-        builder.addCase(todolActions.createTodolist,(state,action)=>{
-            state[action.payload.todolist.id] = []
+    extraReducers: builder => {
+        builder.addCase(setTasks.fulfilled,(state,action)=>{
+            state[action.payload.todolistId] = action.payload.tasks
         })
-        builder.addCase(todolActions.deleteTodolist, (state, actoin) => {
-            delete state[actoin.payload.idTodolist]
-        })
-        builder.addCase(todolActions.deleteDataWhenLogOut,(state,action)=>{
-            state = {}
-        })
-        builder.addCase(todolActions.setTodolists, (state, actoin) => {
-            actoin.payload.todolists.forEach((el: any) => {
-                state[el.id] = []
+            .addCase(todolActions.createTodolist, (state, action) => {
+                state[action.payload.todolist.id] = []
             })
-    })
-}
+            .addCase(todolActions.deleteTodolist, (state, actoin) => {
+                delete state[actoin.payload.idTodolist]
+            })
+            .addCase(todolActions.deleteDataWhenLogOut, (state, action) => {
+                state = {}
+            })
+            .addCase(todolActions.setTodolists, (state, actoin) => {
+                actoin.payload.todolists.forEach((el: any) => {
+                    state[el.id] = []
+                })
+            })
+    }
 })
 
 
@@ -76,7 +86,7 @@ export const tasksReducer = slice.reducer
 
 export const taskActions = slice.actions
 
-
+export const taskThunks = {setTasks}
 
 
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
@@ -154,7 +164,7 @@ export const createTaskTC = (idTodolist: string, text: string) => (
     taskApi.createTask(idTodolist, text)
         .then((respons) => {
             if (respons.data.resultCode === 0) {
-                dispatch(taskActions.createTask({task:respons.data.data.item}))
+                dispatch(taskActions.createTask({task: respons.data.data.item}))
                 dispatch(appActions.setLoading(
                     {valueLoading: 'finishLoading'}))
             } else {
@@ -183,15 +193,3 @@ export const deleteTaskTC = (idTodolist: string, idTask: string) => (
 }
 
 
-export const setTasks = (todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    taskApi.getTasks(todolistId)
-        .then((respons) => {
-            dispatch(taskActions.setTask({todolistId,tasks: respons.data.items}))
-            dispatch(appActions.setLoading(
-                {valueLoading: 'finishLoading'}))
-        })
-        .catch((error) => {
-            utilsFanctionForMethodCatch(error.message, dispatch)
-        })
-}
