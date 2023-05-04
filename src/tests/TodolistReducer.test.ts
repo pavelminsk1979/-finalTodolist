@@ -17,6 +17,22 @@ beforeEach(() => {
     ]
 })
 
+
+test('correct todolist should be change title', () => {
+    const newTitle="I'm New Title"
+    debugger
+    const endState = todolistReducer(
+        startState, todolActions.changeTitleTodolist({
+            idTodolist: todolistId1,
+            editTitle: newTitle
+        }))
+
+
+    expect(endState[0].title).toBe("I'm New Title")
+    expect(endState[1].title).toBe('What to watch')
+})
+
+
 test('correct todolist should be change valueFilter', () => {
     const newValueFilter = 'new'
     const endState = todolistReducer(
@@ -51,7 +67,7 @@ test('should be created new todolis', () => {
 test('correct todolist should be removed', () => {
     const endState = todolistReducer(startState,
         todolActions.deleteTodolist({
-            idTodolist: 'todolistId1'
+            idTodolist: todolistId1
         }))
 
     expect(endState.length).toBe(1)
@@ -60,17 +76,6 @@ test('correct todolist should be removed', () => {
 })
 
 
-test('correct todolist should be change title', () => {
-    const endState = todolistReducer(
-        startState, todolActions.changeTitleTodolist({
-            idTodolist: 'todolistId1',
-            editTitle: "I'm New Title"
-        }))
-
-
-    expect(endState[0].title).toBe("I'm New Title")
-    expect(endState[1].title).toBe('What to watch')
-})
 
 
 

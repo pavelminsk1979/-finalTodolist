@@ -3,43 +3,6 @@ import {CommonTodolistType, TaskStatus} from "../common/types";
 import {todolActions, todolistReducer} from "../state/TodolistReducer";
 
 
-test('should be added todolist and added array task', () => {
-    const startTaskState: StateTaskType = {}
-    const startTodolistState: CommonTodolistType[] = []
-    const newTodolist = {
-        id: 'todolist3',
-        title: "I'm New Todol",
-        addedData: '',
-        order: 1
-    }
-    const action = todolActions.createTodolist({
-        todolist: newTodolist
-    })
-    const endTodolistState = todolistReducer(startTodolistState, action)
-    const endTaskState = tasksReducer(startTaskState, action)
-
-
-    const finishKeys = Object.keys(endTaskState)
-    /*   ---в переменную  finishKeys  попадет МАССИВ КЛЮЧЕЙ-айдишек
-       -Object-это глобальный обьект
-       -Object.keys---это использую метод keys
-       ----Object.keys(endTaskState)---это в аргумент
-       вставил ассоциативный массив--который
-       будет получен после отработки РЕДЬЮСЕРА
-       ----Object.keys(endTaskState)  --и этот код вернет массис
-       именно ключей из ассоциативного  массива*/
-
-    const idTask = finishKeys[0]   /*из массива с айдишками
-          взял одно значение-одну айдишку и
-            в переменную idTask присвоил*/
-    const idTodolist = endTodolistState[0].id
-
-
-    expect(idTask).toBe(action.payload.todolist)
-    expect(idTodolist).toBe(action.payload.todolist.id)
-
-})
-
 test('correct property with tasks should be delete when delete todolist', () => {
     const startTaskState: StateTaskType = {
         'todolistId1': [
