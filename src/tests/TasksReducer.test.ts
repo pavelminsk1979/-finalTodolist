@@ -1,6 +1,6 @@
 
 
-import {StateTaskType, taskActions, tasksReducer} from "../state/TasksReducer";
+import {StateTaskType, taskActions, tasksReducer, taskThunks} from "../state/TasksReducer";
 import { TaskStatus, TaskType} from "../common/types";
 
 
@@ -100,12 +100,13 @@ beforeEach(() => {
 })
 
 test('correct task should be delete', () => {
-    const endState = tasksReducer(
-        startState, taskActions.deleteTask({
-                idTodolist: 'todolistId1',
-                idTask: '2'
-            }
-        ))
+        const endState = tasksReducer(
+            startState, taskThunks.deleteTask.fulfilled({
+                    idTodolist: 'todolistId1',
+                    idTask: '2'
+                },'reguestId',{idTodolist: 'todolistId1',
+                idTask: '2'}
+            ))
 
     expect(endState['todolistId1'].length).toBe(3)
     expect(endState['todolistId1'][0].title).toBe('REACT')

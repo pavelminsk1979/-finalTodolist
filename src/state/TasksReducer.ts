@@ -17,27 +17,44 @@ const initialTaskState: StateTaskType = {}
 
 const setTasks = createAsyncThunk('tasks/setTasks',
     async (todolistId: string, thunAPI) => {
-        thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
-        const respons = await taskApi.getTasks(todolistId)
-        thunAPI.dispatch(appActions.setLoading(
-            {valueLoading: 'finishLoading'}))
-        return {todolistId, tasks: respons.data.items}
+        try {
+            thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+            const respons = await taskApi.getTasks(todolistId)
+            thunAPI.dispatch(appActions.setLoading(
+                {valueLoading: 'finishLoading'}))
+            return {todolistId, tasks: respons.data.items}
+        } catch (e) {
+           return  thunAPI.rejectWithValue('ERROR')
+        }
     })
+
+const deleteTask = createAsyncThunk('tasks/deleteTask', async (arg: { idTodolist: string, idTask: string }, thunAPI) => {
+    thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+    const respons = await taskApi.deleteTask(arg.idTodolist, arg.idTask)
+    thunAPI.dispatch(appActions.setLoading(
+        {valueLoading: 'finishLoading'}))
+    return {idTodolist: arg.idTodolist, idTask: arg.idTask}
+})
+
+/*export const deleteTaskTC = (idTodolist: string, idTask: string) => (
+    dispatch: Dispatch) => {
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
+    taskApi.deleteTask(idTodolist, idTask)
+        .then((respons) => {
+            dispatch(taskActions.deleteTask({idTodolist, idTask}))
+            dispatch(appActions.setLoading(
+                {valueLoading: 'finishLoading'}))
+        })
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
+        })
+}*/
 
 
 const slice = createSlice({
     name: 'tasks',
     initialState: initialTaskState,
     reducers: {
-        deleteTask(state, action: PayloadAction<{
-            idTodolist: string, idTask: string
-        }>) {
-            const tasks = state[action.payload.idTodolist]
-            const index = tasks.findIndex(t => t.id === action.payload.idTask)
-            if (index > -1) {
-                tasks.splice(index, 1)
-            }
-        },
         createTask(state, action: PayloadAction<{ task: TaskType }>) {
             state[action.payload.task.todoListId].unshift(action.payload.task)
         },
@@ -61,9 +78,20 @@ const slice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(setTasks.fulfilled,(state,action)=>{
-            state[action.payload.todolistId] = action.payload.tasks
-        })
+        builder
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                const tasks = state[action.payload.idTodolist]
+                const index = tasks.findIndex(t => t.id === action.payload.idTask)
+                if (index > -1) {
+                    tasks.splice(index, 1)
+                }
+            })
+            .addCase(setTasks.fulfilled, (state, action) => {
+                state[action.payload.todolistId] = action.payload.tasks
+            })
+            .addCase(setTasks.rejected, (state, action) => {
+
+            })
             .addCase(todolActions.createTodolist, (state, action) => {
                 state[action.payload.todolist.id] = []
             })
@@ -86,7 +114,7 @@ export const tasksReducer = slice.reducer
 
 export const taskActions = slice.actions
 
-export const taskThunks = {setTasks}
+export const taskThunks = {setTasks, deleteTask}
 
 
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
@@ -178,18 +206,6 @@ export const createTaskTC = (idTodolist: string, text: string) => (
 }
 
 
-export const deleteTaskTC = (idTodolist: string, idTask: string) => (
-    dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    taskApi.deleteTask(idTodolist, idTask)
-        .then((respons) => {
-            dispatch(taskActions.deleteTask({idTodolist, idTask}))
-            dispatch(appActions.setLoading(
-                {valueLoading: 'finishLoading'}))
-        })
-        .catch((error) => {
-            utilsFanctionForMethodCatch(error.message, dispatch)
-        })
-}
+
 
 

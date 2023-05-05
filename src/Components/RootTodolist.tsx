@@ -8,7 +8,7 @@ import {
     changeCheckboxTaskTC,
     changeTitleTaskTC,
     createTaskTC,
-    deleteTaskTC
+     taskThunks
 } from "../state/TasksReducer";
 import {
     changeTitleTodolistTC,
@@ -82,7 +82,7 @@ export function RootTodolist() {
     }
 
     const deleteTask = (idTodolist: string, idTask: string) => {
-        dispatch(deleteTaskTC(idTodolist, idTask))
+        dispatch(taskThunks.deleteTask({idTodolist, idTask}))
     }
 
     if (!isLoggedIn) {
