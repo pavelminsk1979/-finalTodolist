@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import {
     changeCheckboxTaskTC,
     changeTitleTaskTC,
-    createTaskTC,
      taskThunks
 } from "../state/TasksReducer";
 import {
@@ -74,7 +73,7 @@ export function RootTodolist() {
 
 
     const createTask = (idTodolist: string, text: string) => {
-        dispatch(createTaskTC(idTodolist, text))
+        dispatch(taskThunks.createTask({idTodolist, text}))
     }
 
     const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {

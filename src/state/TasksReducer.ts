@@ -16,25 +16,72 @@ const initialTaskState: StateTaskType = {}
 
 
 const setTasks = createAsyncThunk('tasks/setTasks',
-    async (todolistId: string, thunAPI) => {
+    async (todolistId: string, thunkAPI) => {
         try {
-            thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+            thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
             const respons = await taskApi.getTasks(todolistId)
-            thunAPI.dispatch(appActions.setLoading(
+            thunkAPI.dispatch(appActions.setLoading(
                 {valueLoading: 'finishLoading'}))
             return {todolistId, tasks: respons.data.items}
-        } catch (e) {
-           return  thunAPI.rejectWithValue('ERROR')
+        } catch (e: any) {
+            utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue(null)
         }
     })
 
-const deleteTask = createAsyncThunk('tasks/deleteTask', async (arg: { idTodolist: string, idTask: string }, thunAPI) => {
-    thunAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    const respons = await taskApi.deleteTask(arg.idTodolist, arg.idTask)
-    thunAPI.dispatch(appActions.setLoading(
-        {valueLoading: 'finishLoading'}))
-    return {idTodolist: arg.idTodolist, idTask: arg.idTask}
+const deleteTask = createAsyncThunk('tasks/deleteTask', async (arg: { idTodolist: string, idTask: string }, thunkAPI) => {
+    try {
+        thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+        const respons = await taskApi.deleteTask(arg.idTodolist, arg.idTask)
+        thunkAPI.dispatch(appActions.setLoading(
+            {valueLoading: 'finishLoading'}))
+        return {idTodolist: arg.idTodolist, idTask: arg.idTask}
+    } catch (e: any) {
+        utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+        return thunkAPI.rejectWithValue(null)
+    }
+
 })
+
+const createTask = createAsyncThunk('tasks/createTask', async (arg: { idTodolist: string, text: string }, thunkAPI) => {
+    try {
+        thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
+        const respons = await taskApi.createTask(arg.idTodolist, arg.text)
+        if (respons.data.resultCode === 0) {
+            thunkAPI.dispatch(appActions.setLoading(
+                {valueLoading: 'finishLoading'}))
+            return {task: respons.data.data.item}
+        } else {
+            utilsFanctionForShowError(
+                respons.data.messages, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue(null)
+        }
+    } catch (e: any) {
+        utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+        return thunkAPI.rejectWithValue(null)
+    }
+
+})
+
+
+/*export const createTaskTC = (idTodolist: string, text: string) => (
+    dispatch: Dispatch) => {
+    dispatch(appActions.setLoading({valueLoading: 'loading'}))
+    taskApi.createTask(idTodolist, text)
+        .then((respons) => {
+            if (respons.data.resultCode === 0) {
+                dispatch(taskActions.createTask({task: respons.data.data.item}))
+                dispatch(appActions.setLoading(
+                    {valueLoading: 'finishLoading'}))
+            } else {
+                utilsFanctionForShowError(
+                    respons.data.messages, dispatch)
+            }
+        })
+        .catch((error) => {
+            utilsFanctionForMethodCatch(error.message, dispatch)
+        })
+}*/
 
 /*export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
@@ -55,9 +102,6 @@ const slice = createSlice({
     name: 'tasks',
     initialState: initialTaskState,
     reducers: {
-        createTask(state, action: PayloadAction<{ task: TaskType }>) {
-            state[action.payload.task.todoListId].unshift(action.payload.task)
-        },
         changeTitleTask(state, action: PayloadAction<{
             idTodolist: string, idTask: string, item: PayloadTaskType
         }>) {
@@ -79,6 +123,9 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder
+            .addCase(createTask.fulfilled, (state, action) => {
+                state[action.payload.task.todoListId].unshift(action.payload.task)
+            })
             .addCase(deleteTask.fulfilled, (state, action) => {
                 const tasks = state[action.payload.idTodolist]
                 const index = tasks.findIndex(t => t.id === action.payload.idTask)
@@ -88,9 +135,6 @@ const slice = createSlice({
             })
             .addCase(setTasks.fulfilled, (state, action) => {
                 state[action.payload.todolistId] = action.payload.tasks
-            })
-            .addCase(setTasks.rejected, (state, action) => {
-
             })
             .addCase(todolActions.createTodolist, (state, action) => {
                 state[action.payload.todolist.id] = []
@@ -114,7 +158,7 @@ export const tasksReducer = slice.reducer
 
 export const taskActions = slice.actions
 
-export const taskThunks = {setTasks, deleteTask}
+export const taskThunks = {setTasks, deleteTask, createTask}
 
 
 export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
@@ -186,24 +230,7 @@ export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle:
 }
 
 
-export const createTaskTC = (idTodolist: string, text: string) => (
-    dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    taskApi.createTask(idTodolist, text)
-        .then((respons) => {
-            if (respons.data.resultCode === 0) {
-                dispatch(taskActions.createTask({task: respons.data.data.item}))
-                dispatch(appActions.setLoading(
-                    {valueLoading: 'finishLoading'}))
-            } else {
-                utilsFanctionForShowError(
-                    respons.data.messages, dispatch)
-            }
-        })
-        .catch((error) => {
-            utilsFanctionForMethodCatch(error.message, dispatch)
-        })
-}
+
 
 
 

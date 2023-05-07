@@ -172,8 +172,10 @@ test('should be created new task', () => {
         addedDate: ''
     }
     const endState = tasksReducer(
-        startState, taskActions.createTask(
-            {task: newTask}))
+        startState, taskThunks.createTask.fulfilled(
+            {task: newTask},'reguestId',
+            { idTodolist: newTask.todoListId,
+                text: newTask.title }))
 
     expect(endState['todolistId2'][0].title).toBe("I'm New Task")
     expect(endState['todolistId2'][1].title).toBe("Rembo1")
