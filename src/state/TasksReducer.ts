@@ -6,6 +6,7 @@ import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/u
 import {appActions} from "./appReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {todolActions} from "./TodolistReducer";
+import {createAppAsyncThunk} from "../utils/createAppAsyncThunk";
 
 
 export type StateTaskType = {
@@ -15,8 +16,8 @@ export type StateTaskType = {
 const initialTaskState: StateTaskType = {}
 
 
-const setTasks = createAsyncThunk('tasks/setTasks',
-    async (todolistId: string, thunkAPI) => {
+const setTasks = createAppAsyncThunk<{todolistId:string, tasks:TaskType[]},string>('tasks/setTasks',
+    async (todolistId, thunkAPI) => {
         try {
             thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
             const respons = await taskApi.getTasks(todolistId)
