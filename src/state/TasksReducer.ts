@@ -20,12 +20,12 @@ const setTasks = createAppAsyncThunk<{todolistId:string, tasks:TaskType[]},strin
     async (todolistId, thunkAPI) => {
         try {
             thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
-            const respons = await taskApi.getTasks(todolistId)
+            const respons = await taskApi.getTasks('todolistId')
             thunkAPI.dispatch(appActions.setLoading(
                 {valueLoading: 'finishLoading'}))
             return {todolistId, tasks: respons.data.items}
-        } catch (e: any) {
-            utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+        } catch (e) {
+            utilsFanctionForMethodCatch(e,thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
         }
     })

@@ -26,8 +26,8 @@ const slice = createSlice({
     name: 'app',
     initialState: initialStateApp,
     reducers: {
-        errorShow (state, action: PayloadAction<{errorText: null | string}>) {
-            state.error = action.payload.errorText
+        errorShow (state, action: PayloadAction<{error: string|null}>) {
+            state.error = action.payload.error
         },
         setLoading (state, action: PayloadAction<{valueLoading: LoadingType}>) {
             state.statusLoading = action.payload.valueLoading
