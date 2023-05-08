@@ -25,7 +25,7 @@ export function ErrorSnackbar() {
             return
         }
         dispatch(appActions.errorShow(
-            {errorText:null}))
+            {error:null}))
     }
     return (
         <Snackbar

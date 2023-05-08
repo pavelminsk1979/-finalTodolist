@@ -20,7 +20,7 @@ const setTasks = createAppAsyncThunk<{todolistId:string, tasks:TaskType[]},strin
     async (todolistId, thunkAPI) => {
         try {
             thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
-            const respons = await taskApi.getTasks('todolistId')
+            const respons = await taskApi.getTasks(todolistId)
             thunkAPI.dispatch(appActions.setLoading(
                 {valueLoading: 'finishLoading'}))
             return {todolistId, tasks: respons.data.items}
