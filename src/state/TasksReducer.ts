@@ -30,23 +30,26 @@ const setTasks = createAppAsyncThunk<{todolistId:string, tasks:TaskType[]},strin
         }
     })
 
-const deleteTask = createAsyncThunk('tasks/deleteTask', async (arg: { idTodolist: string, idTask: string }, thunkAPI) => {
+const deleteTask = createAppAsyncThunk<
+    {idTodolist:string, idTask:string},{ idTodolist: string, idTask: string }>('tasks/deleteTask', async (arg,thunkAPI) => {
     try {
         thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
         const respons = await taskApi.deleteTask(arg.idTodolist, arg.idTask)
         thunkAPI.dispatch(appActions.setLoading(
             {valueLoading: 'finishLoading'}))
         return {idTodolist: arg.idTodolist, idTask: arg.idTask}
-    } catch (e: any) {
-        utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+    } catch (e) {
+        utilsFanctionForMethodCatch(e, thunkAPI.dispatch)
         return thunkAPI.rejectWithValue(null)
     }
 
 })
 
-const createTask = createAsyncThunk('tasks/createTask', async (arg: { idTodolist: string, text: string }, thunkAPI) => {
+const createTask = createAppAsyncThunk<{task: TaskType},
+    { idTodolist: string, text: string }>('tasks/createTask', async (arg,thunkAPI) => {
+    thunkAPI.dispatch(appActions.setLoading(
+        {valueLoading: 'loading'}))
     try {
-        thunkAPI.dispatch(appActions.setLoading({valueLoading: 'loading'}))
         const respons = await taskApi.createTask(arg.idTodolist, arg.text)
         if (respons.data.resultCode === 0) {
             thunkAPI.dispatch(appActions.setLoading(
@@ -57,32 +60,13 @@ const createTask = createAsyncThunk('tasks/createTask', async (arg: { idTodolist
                 respons.data.messages, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
         }
-    } catch (e: any) {
-        utilsFanctionForMethodCatch(e.response.data.message, thunkAPI.dispatch)
+    } catch (e) {
+        utilsFanctionForMethodCatch(e, thunkAPI.dispatch)
         return thunkAPI.rejectWithValue(null)
     }
 
 })
 
-
-/*export const createTaskTC = (idTodolist: string, text: string) => (
-    dispatch: Dispatch) => {
-    dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    taskApi.createTask(idTodolist, text)
-        .then((respons) => {
-            if (respons.data.resultCode === 0) {
-                dispatch(taskActions.createTask({task: respons.data.data.item}))
-                dispatch(appActions.setLoading(
-                    {valueLoading: 'finishLoading'}))
-            } else {
-                utilsFanctionForShowError(
-                    respons.data.messages, dispatch)
-            }
-        })
-        .catch((error) => {
-            utilsFanctionForMethodCatch(error.message, dispatch)
-        })
-}*/
 
 /*export const deleteTaskTC = (idTodolist: string, idTask: string) => (
     dispatch: Dispatch) => {
