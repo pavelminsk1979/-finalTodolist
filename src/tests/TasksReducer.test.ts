@@ -145,12 +145,18 @@ test('correct task should be change title', () => {
         status: 2,
         priority: 0,
         startDate: '',
-        deadline: ''
+        deadline: '',
+        id:'',
+        todoListId:'',
+        order:0,
+        addedDate:''
     }
     const endState = tasksReducer(
-        startState, taskActions.changeTitleTask({
+        startState, taskThunks.changeTitleTask.fulfilled ({
             idTodolist: 'todolistId2', idTask: '5', item: newTask
-        }))
+        },'requestId',
+            {idTodolist:'todolistId2',
+                idTask:'5',editTitle:newTask.title}))
 
     expect(endState['todolistId2'][0].title).toBe("I'm Edit Title")
     expect(endState['todolistId2'][1].title).toBe("YouTube")

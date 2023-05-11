@@ -1,14 +1,12 @@
 
 import {combineReducers} from "redux";
-import {tasksReducer} from "./TasksReducer";
 import {useDispatch} from "react-redux";
 import  {ThunkDispatch} from "redux-thunk";
 import { appReducer} from "./appReducer";
 import {authReducer} from "./authReducer";
 import {todolistReducer} from "./TodolistReducer";
 import {configureStore} from "@reduxjs/toolkit";
-
-
+import {tasksReducer} from "./TasksReducer";
 
 
 
