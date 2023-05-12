@@ -4,10 +4,7 @@ import {CreateItemForm} from "./CreateItemForm";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import {
-    changeCheckboxTaskTC,
-     taskThunks
-} from "../state/TasksReducer";
+import {taskThunks} from "../state/TasksReducer";
 import {
     changeTitleTodolistTC,
     createTodolistTC, deleteTodolistTC,
@@ -23,6 +20,7 @@ import {selectStatusLoading} from "../state/appSelectors";
 import {selectIsIsLoggedIn} from "../state/authSelectors";
 import {selectTasks} from "../state/taskSelectors";
 import {selectTodolists} from "../state/todolistsSelectors";
+
 
 
 export function RootTodolist() {
@@ -75,8 +73,10 @@ export function RootTodolist() {
         dispatch(taskThunks.createTask({idTodolist, text}))
     }
 
-    const changeCheckboxTask = (idTodolist: string, idTask: string, valueCheckbox: boolean) => {
-        dispatch(changeCheckboxTaskTC(idTodolist, idTask, valueCheckbox))
+    const changeCheckboxTask = (idTodolist: string, idTask: string,
+                                valueCheckbox: boolean) => {
+
+        dispatch(taskThunks.changeCheckboxTask({idTodolist, idTask, valueCheckbox}))
     }
 
     const deleteTask = (idTodolist: string, idTask: string) => {
@@ -127,4 +127,6 @@ export function RootTodolist() {
         </div>
     );
 }
+
+
 

@@ -1,6 +1,6 @@
 
 
-import {StateTaskType, taskActions, tasksReducer, taskThunks} from "../state/TasksReducer";
+import {StateTaskType, tasksReducer, taskThunks} from "../state/TasksReducer";
 import { TaskStatus, TaskType} from "../common/types";
 
 
@@ -119,16 +119,24 @@ test('correct task should be change Checkbox', () => {
     const newTask = {
         title: '',
         description: '',
-        status: 2,
+        status: TaskStatus.Complete,
         priority: 0,
         startDate: '',
-        deadline: ''
+        deadline: '',
+        id:'',
+        todoListId:'',
+        order:0,
+        addedDate:''
     }
     const endState = tasksReducer(
-        startState, taskActions.changeCheckboxTask({
+        startState, taskThunks.changeCheckboxTask.fulfilled({
                 idTodolist: 'todolistId1',
                 idTask: '2',
                 item: newTask
+            },'reguestId',{
+            idTodolist: 'todolistId1',
+            idTask: '2',
+            valueCheckbox: true
             }
         ))
 
