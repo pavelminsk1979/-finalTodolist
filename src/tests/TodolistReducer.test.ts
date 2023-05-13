@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {CommonTodolistType} from "../common/types";
-import {todolActions, todolistReducer} from "../state/TodolistReducer";
+import {todolActions, todolistReducer, todolistThunk} from "../features/todolist/TodolistReducer";
 
 let todolistId1: string
 let todolistId2: string
@@ -55,7 +55,8 @@ test('should be created new todolis', () => {
         order: 0
     }
     const endState = todolistReducer(startState,
-        todolActions.createTodolist({todolist: newTodolist}
+        todolistThunk.createTodolist.fulfilled({todolist: newTodolist},
+            'reguestId', {text: newTodolist.title}
         ))
 
     expect(endState.length).toBe(3)

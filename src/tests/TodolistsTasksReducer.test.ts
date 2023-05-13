@@ -1,6 +1,6 @@
-import {StateTaskType, tasksReducer} from "../state/TasksReducer";
+import {StateTaskType, tasksReducer} from "../features/task/TasksReducer";
 import {CommonTodolistType, TaskStatus} from "../common/types";
-import {todolActions, todolistReducer} from "../state/TodolistReducer";
+import {todolActions, todolistReducer} from "../features/todolist/TodolistReducer";
 
 
 test('correct property with tasks should be delete when delete todolist', () => {

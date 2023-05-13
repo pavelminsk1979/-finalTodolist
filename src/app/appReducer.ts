@@ -1,8 +1,8 @@
 import {Dispatch} from "redux";
 import {authApi} from "../api/api";
-import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
-import {authActions} from "./authReducer";
+import {authActions} from "../features/auth/authReducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { utilsFanctionForMethodCatch } from "../common/utils/utilsFanctionForMethodCatch";
 
 
 

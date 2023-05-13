@@ -1,11 +1,13 @@
 
-import {taskApi} from "../api/api";
-import { TaskStatus, TaskType} from "../common/types";
-import {utilsFanctionForMethodCatch, utilsFanctionForShowError} from "../utils/utilsFanction";
-import {appActions} from "./appReducer";
+import {taskApi} from "../../api/api";
+import { TaskStatus, TaskType} from "../../common/types";
+import {appActions} from "../../app/appReducer";
 import { createSlice} from "@reduxjs/toolkit";
-import {todolActions} from "./TodolistReducer";
-import {createAppAsyncThunk} from "../utils/createAppAsyncThunk";
+import {todolActions, todolistThunk} from "../todolist/TodolistReducer";
+import {createAppAsyncThunk} from "../../common/utils/createAppAsyncThunk";
+import { utilsFanctionForMethodCatch } from "../../common/utils/utilsFanctionForMethodCatch";
+import {utilsFanctionForShowError} from "../../common/utils/utilsFanctionForShowError";
+
 
 
 export type StateTaskType = {
@@ -269,7 +271,7 @@ const changeCheckboxTask = createAppAsyncThunk<{
                 .addCase(setTasks.fulfilled, (state, action) => {
                     state[action.payload.todolistId] = action.payload.tasks
                 })
-                .addCase(todolActions.createTodolist, (state, action) => {
+                .addCase(todolistThunk.createTodolist.fulfilled, (state, action) => {
                     state[action.payload.todolist.id] = []
                 })
                 .addCase(todolActions.deleteTodolist, (state, actoin) => {
@@ -278,7 +280,7 @@ const changeCheckboxTask = createAppAsyncThunk<{
                 .addCase(todolActions.deleteDataWhenLogOut, (state, action) => {
                     state = {}
                 })
-                .addCase(todolActions.setTodolists, (state, actoin) => {
+                .addCase(todolistThunk.setTodolists.fulfilled, (state, actoin) => {
                     actoin.payload.todolists.forEach((el: any) => {
                         state[el.id] = []
                     })
@@ -289,7 +291,6 @@ const changeCheckboxTask = createAppAsyncThunk<{
 
     export const tasksReducer = slice.reducer
 
-    export const taskActions = slice.actions
 
     export const taskThunks = {setTasks, deleteTask, createTask, changeTitleTask,changeCheckboxTask}
 

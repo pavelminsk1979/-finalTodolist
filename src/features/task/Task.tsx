@@ -1,10 +1,10 @@
 import React from "react";
-import stule from "../Todolist.module.css";
+import stule from "../../Todolist.module.css";
 import Checkbox from "@mui/material/Checkbox";
-import {EditModeTitle} from "./EditModeTitle";
+import {EditModeTitle} from "../../Components/EditModeTitle";
 import IconButton from "@mui/material/IconButton";
 import CancelPresentation from "@mui/icons-material/CancelPresentation";
-import {TaskStatus, TaskType} from "../common/types";
+import {TaskStatus, TaskType} from "../../common/types";
 
 
 type TaskComponentType = {

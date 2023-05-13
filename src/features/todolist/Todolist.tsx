@@ -1,12 +1,12 @@
 import React, {useCallback} from "react";
-import {CreateItemForm} from "./CreateItemForm";
-import {EditModeTitle} from "./EditModeTitle";
+import {CreateItemForm} from "../../Components/CreateItemForm";
+import {EditModeTitle} from "../../Components/EditModeTitle";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import {Task} from "./Task";
-import {CommonTodolistType, FilterType, TaskStatus} from "../common/types";
-import { StateTaskType} from "../state/TasksReducer";
+import {Task} from "../task/Task";
+import {CommonTodolistType, FilterType, TaskStatus} from "../../common/types";
+import { StateTaskType} from "../task/TasksReducer";
 
 type TodolistType = {
     filter: FilterType

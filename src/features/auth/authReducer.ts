@@ -1,10 +1,10 @@
 import {Dispatch} from "redux";
-import {authApi} from "../api/api";
-import {utilsFanctionForMethodCatch} from "../utils/utilsFanction";
-import {LoginDataType} from "../common/types";
+import {authApi} from "../../api/api";
+import {LoginDataType} from "../../common/types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {appActions} from "./appReducer";
-import {todolActions} from "./TodolistReducer";
+import {appActions} from "../../app/appReducer";
+import {todolActions} from "../todolist/TodolistReducer";
+import {utilsFanctionForMethodCatch} from "../../common/utils/utilsFanctionForMethodCatch";
 
 
 type initialStateAuthReducerType = {

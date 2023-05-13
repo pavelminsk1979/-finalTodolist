@@ -1,6 +1,6 @@
 
 
-import {StateTaskType, tasksReducer, taskThunks} from "../state/TasksReducer";
+import {StateTaskType, tasksReducer, taskThunks} from "../features/task/TasksReducer";
 import { TaskStatus, TaskType} from "../common/types";
 
 
