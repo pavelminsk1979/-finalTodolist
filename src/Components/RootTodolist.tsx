@@ -1,24 +1,22 @@
 import React, {useCallback, useEffect} from 'react';
-import {Todolist} from "../features/todolist/Todolist";
+import {Todolist} from "features/todolist/Todolist";
 import {CreateItemForm} from "./CreateItemForm";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import {taskThunks} from "../features/task/TasksReducer";
-import {
-    changeTitleTodolistTC, deleteTodolistTC,
-    todolActions, todolistThunk
-} from "../features/todolist/TodolistReducer";
+import {taskThunks} from "features/task/TasksReducer";
+import {todolActions, todolistThunk
+} from "features/todolist/TodolistReducer";
 import {useSelector} from "react-redux";
-import { useAppDispatch} from "../app/store";
-import { FilterType} from "../common/types";
+import { useAppDispatch} from "app/store";
+import { FilterType} from "common/types";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
-import {selectStatusLoading} from "../app/appSelectors";
-import {selectIsIsLoggedIn} from "../features/auth/authSelectors";
-import {selectTasks} from "../features/task/taskSelectors";
-import {selectTodolists} from "../features/todolist/todolistsSelectors";
+import {selectStatusLoading} from "app/appSelectors";
+import {selectIsIsLoggedIn} from "features/auth/authSelectors";
+import {selectTasks} from "features/task/taskSelectors";
+import {selectTodolists} from "features/todolist/todolistsSelectors";
 
 
 
@@ -50,12 +48,12 @@ export function RootTodolist() {
     }
 
     const deleteTodolist = (idTodolist: string) => {
-        dispatch(deleteTodolistTC(idTodolist))
+        dispatch(todolistThunk.deleteTodolist({idTodolist}))
     }
 
 
     const changeTitleTodolist = (idTodolist: string, editTitle: string) => {
-        dispatch(changeTitleTodolistTC(idTodolist, editTitle))
+        dispatch(todolistThunk.changeTitleTodolist({idTodolist, editTitle}))
     }
 
     const createTodolist = useCallback((text: string) => {

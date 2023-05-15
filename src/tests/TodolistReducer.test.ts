@@ -1,6 +1,6 @@
 import {v1} from "uuid";
-import {CommonTodolistType} from "../common/types";
-import {todolActions, todolistReducer, todolistThunk} from "../features/todolist/TodolistReducer";
+import {CommonTodolistType} from "common/types";
+import {todolActions, todolistReducer, todolistThunk} from "features/todolist/TodolistReducer";
 
 let todolistId1: string
 let todolistId2: string
@@ -20,12 +20,11 @@ beforeEach(() => {
 
 test('correct todolist should be change title', () => {
     const newTitle="I'm New Title"
-    debugger
     const endState = todolistReducer(
-        startState, todolActions.changeTitleTodolist({
+        startState, todolistThunk.changeTitleTodolist.fulfilled({
             idTodolist: todolistId1,
             editTitle: newTitle
-        }))
+        }, 'reguestId' , {idTodolist: todolistId1, editTitle: newTitle} ))
 
 
     expect(endState[0].title).toBe("I'm New Title")
@@ -67,9 +66,9 @@ test('should be created new todolis', () => {
 
 test('correct todolist should be removed', () => {
     const endState = todolistReducer(startState,
-        todolActions.deleteTodolist({
-            idTodolist: todolistId1
-        }))
+        todolistThunk.deleteTodolist.fulfilled(
+            {idTodolist: todolistId1},'reguestId',
+            {idTodolist: todolistId1} ))
 
     expect(endState.length).toBe(1)
     expect(endState[0].title).toBe('What to watch')

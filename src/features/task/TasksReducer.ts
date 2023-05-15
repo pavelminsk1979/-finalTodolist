@@ -1,12 +1,12 @@
 
-import {taskApi} from "../../api/api";
-import { TaskStatus, TaskType} from "../../common/types";
-import {appActions} from "../../app/appReducer";
+import {taskApi} from "api/api";
+import {TaskStatus, TaskType} from "common/types";
+import {appActions} from "app/appReducer";
 import { createSlice} from "@reduxjs/toolkit";
 import {todolActions, todolistThunk} from "../todolist/TodolistReducer";
-import {createAppAsyncThunk} from "../../common/utils/createAppAsyncThunk";
-import { utilsFanctionForMethodCatch } from "../../common/utils/utilsFanctionForMethodCatch";
-import {utilsFanctionForShowError} from "../../common/utils/utilsFanctionForShowError";
+import {createAppAsyncThunk} from "common/utils/createAppAsyncThunk";
+import { utilsFanctionForMethodCatch } from "common/utils/utilsFanctionForMethodCatch";
+import {utilsFanctionForShowError} from "common/utils/utilsFanctionForShowError";
 
 
 
@@ -154,89 +154,6 @@ const changeCheckboxTask = createAppAsyncThunk<{
     })
 
 
-/*export const changeCheckboxTaskTC = (idTodolist: string, idTask: string, valueCheckbox: boolean) => (
-    dispatch: Dispatch, getState: () => StateStoreType) => {
-    const state = getState()
-    const allTasks = state.tasks
-    const taskForCorrectTodolist = allTasks[idTodolist]
-    const task = taskForCorrectTodolist.find(e => e.id === idTask)
-    let value: TaskStatus
-    if (valueCheckbox === true) {
-        value = TaskStatus.Complete
-    } else {
-        value = TaskStatus.New
-    }
-    if (task) {
-        dispatch(appActions.setLoading({valueLoading: 'loading'}))
-        taskApi.updateCheckboxTask(idTodolist, idTask, {
-            title: task.title,
-            description: task.description,
-            status: value,
-            priority: task.priority,
-            startDate: task.startDate,
-            deadline: task.deadline
-        })
-            .then((respons) => {
-                dispatch(taskActions.changeCheckboxTask(
-                    {idTodolist, idTask, item: respons.data.data.item}))
-                dispatch(appActions.setLoading(
-                    {valueLoading: 'finishLoading'}))
-            })
-            .catch((error) => {
-                utilsFanctionForMethodCatch(error.message, dispatch)
-            })
-    }
-}*/
-
-
-/*
-    export const changeTitleTaskTC = (idTodolist: string, idTask: string, editTitle: string) => (
-        dispatch: Dispatch, getState: () => StateStoreType) => {
-        const state = getState()
-        const allTasks = state.tasks
-        const taskForCorrectTodolist = allTasks[idTodolist]
-        const task = taskForCorrectTodolist.find(e => e.id === idTask)
-        if (task) {
-            dispatch(appActions.setLoading({valueLoading: 'loading'}))
-            taskApi.updateTask(idTodolist, idTask, {
-                title: editTitle,
-                description: task.description,
-                status: task.status,
-                priority: task.priority,
-                startDate: task.startDate,
-                deadline: task.deadline
-            })
-                .then((respons) => {
-                    if (respons.data.resultCode === 0) {
-                        dispatch(taskActions.changeTitleTask(
-                            {idTodolist, idTask, item: respons.data.data.item}))
-                        dispatch(appActions.setLoading(
-                            {valueLoading: 'finishLoading'}))
-                    } else {
-                        utilsFanctionForShowError(
-                            respons.data.messages, dispatch)
-                    }
-                })
-                .catch((error) => {
-                    utilsFanctionForMethodCatch(error.message, dispatch)
-                })
-        }
-    }*/
-
-    /*export const deleteTaskTC = (idTodolist: string, idTask: string) => (
-        dispatch: Dispatch) => {
-        dispatch(appActions.setLoading({valueLoading: 'loading'}))
-        taskApi.deleteTask(idTodolist, idTask)
-            .then((respons) => {
-                dispatch(taskActions.deleteTask({idTodolist, idTask}))
-                dispatch(appActions.setLoading(
-                    {valueLoading: 'finishLoading'}))
-            })
-            .catch((error) => {
-                utilsFanctionForMethodCatch(error.message, dispatch)
-            })
-    }*/
-
 
     const slice = createSlice({
         name: 'tasks',
@@ -274,7 +191,7 @@ const changeCheckboxTask = createAppAsyncThunk<{
                 .addCase(todolistThunk.createTodolist.fulfilled, (state, action) => {
                     state[action.payload.todolist.id] = []
                 })
-                .addCase(todolActions.deleteTodolist, (state, actoin) => {
+                .addCase(todolistThunk.deleteTodolist.fulfilled, (state, actoin) => {
                     delete state[actoin.payload.idTodolist]
                 })
                 .addCase(todolActions.deleteDataWhenLogOut, (state, action) => {

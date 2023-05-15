@@ -1,10 +1,11 @@
 import React from "react";
-import stule from "../../Todolist.module.css";
 import Checkbox from "@mui/material/Checkbox";
-import {EditModeTitle} from "../../Components/EditModeTitle";
 import IconButton from "@mui/material/IconButton";
 import CancelPresentation from "@mui/icons-material/CancelPresentation";
-import {TaskStatus, TaskType} from "../../common/types";
+import {TaskStatus, TaskType} from "common/types";
+import {EditModeTitle} from "Components/EditModeTitle";
+import st from "./Task.module.css"
+
 
 
 type TaskComponentType = {
@@ -31,7 +32,8 @@ export const Task = (
     }
 
   return(
-      <div className={task.status===TaskStatus.Complete ? stule.completeTask : ''}
+      <div className={task.status===TaskStatus.Complete
+          ? st.completeTask : ''}
            key={task.id}>
 
           <Checkbox

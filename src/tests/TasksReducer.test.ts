@@ -1,7 +1,7 @@
 
 
-import {StateTaskType, tasksReducer, taskThunks} from "../features/task/TasksReducer";
-import { TaskStatus, TaskType} from "../common/types";
+import {StateTaskType, tasksReducer, taskThunks} from "features/task/TasksReducer";
+import { TaskStatus, TaskType} from "common/types";
 
 
 let startState: StateTaskType

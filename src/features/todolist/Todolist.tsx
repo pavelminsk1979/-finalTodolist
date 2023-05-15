@@ -1,12 +1,13 @@
 import React, {useCallback} from "react";
-import {CreateItemForm} from "../../Components/CreateItemForm";
-import {EditModeTitle} from "../../Components/EditModeTitle";
+import {CreateItemForm} from "Components/CreateItemForm";
+import {EditModeTitle} from "Components/EditModeTitle";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "../task/Task";
-import {CommonTodolistType, FilterType, TaskStatus} from "../../common/types";
-import { StateTaskType} from "../task/TasksReducer";
+import {CommonTodolistType, FilterType, TaskStatus} from "common/types";
+import {StateTaskType} from "../task/TasksReducer";
+
 
 type TodolistType = {
     filter: FilterType
@@ -132,3 +133,20 @@ export const Todolist = ({
         </div>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

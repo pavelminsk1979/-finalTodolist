@@ -3,10 +3,10 @@ import {combineReducers} from "redux";
 import {useDispatch} from "react-redux";
 import  {ThunkDispatch} from "redux-thunk";
 import { appReducer} from "./appReducer";
-import {authReducer} from "../features/auth/authReducer";
-import {todolistReducer} from "../features/todolist/TodolistReducer";
+import {authReducer} from "features/auth/authReducer";
+import {todolistReducer} from "features/todolist/TodolistReducer";
 import {configureStore} from "@reduxjs/toolkit";
-import {tasksReducer} from "../features/task/TasksReducer";
+import {tasksReducer} from "features/task/TasksReducer";
 
 
 

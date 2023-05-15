@@ -1,6 +1,6 @@
-import {StateTaskType, tasksReducer} from "../features/task/TasksReducer";
-import {CommonTodolistType, TaskStatus} from "../common/types";
-import {todolActions, todolistReducer} from "../features/todolist/TodolistReducer";
+import {StateTaskType, tasksReducer} from "features/task/TasksReducer";
+import {CommonTodolistType, TaskStatus} from "common/types";
+import {todolActions, todolistReducer, todolistThunk} from "features/todolist/TodolistReducer";
 
 
 test('correct property with tasks should be delete when delete todolist', () => {
@@ -100,7 +100,13 @@ test('correct property with tasks should be delete when delete todolist', () => 
         {id: 'todolistId2', title: 'What to watch', filter: 'all', addedData: '', order: 0, disableStatus: false},
     ]
 
-    const action = todolActions.deleteTodolist({ idTodolist: 'todolistId2' })
+   /* const action = todolActions.deleteTodolist({ idTodolist: 'todolistId2' })*/
+
+    const action =  todolistThunk.deleteTodolist.fulfilled(
+        {idTodolist: 'todolistId2'},'reguestId',
+        {idTodolist: 'todolistId2'} )
+
+
 
     const endTodolistState = todolistReducer(startTodolistState, action)
     const endTaskState = tasksReducer(startTaskState, action)
