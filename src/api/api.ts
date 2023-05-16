@@ -5,7 +5,7 @@ import {
     PayloadTaskType,
     TaskType,
     TodolistType
-} from "../common/types";
+} from "common/types";
 
 
 const instance = axios.create({

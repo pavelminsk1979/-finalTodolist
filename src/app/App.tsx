@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import PrimarySearchAppBar from "../Components/AppBar";
-import {RootTodolist} from "../Components/RootTodolist";
+import {RootTodolist} from "Components/RootTodolist";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "../Components/Login";
+import {Login} from "Components/Login";
 import {useAppDispatch} from "./store";
-import {initializeAppTC} from "./appReducer";
 import {useSelector} from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import {selectIsInitialized} from "./appSelectors";
+import {appThunk} from "app/appReducer";
+
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
     const isInitialized = useSelector(selectIsInitialized)
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        dispatch(appThunk.initializeApp())
     })
 
     if(!isInitialized){
