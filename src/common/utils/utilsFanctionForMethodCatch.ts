@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import axios, {AxiosError} from "axios";
-import {appActions} from "../../app/appReducer";
+import {appActions} from "app/appReducer";
 
 export const utilsFanctionForMethodCatch = (e: unknown, dispatch: Dispatch) => {
     const err = e as Error | AxiosError<{ error: string }>
@@ -11,5 +11,5 @@ export const utilsFanctionForMethodCatch = (e: unknown, dispatch: Dispatch) => {
         dispatch(appActions.errorShow({error: `Native error ${err.message}`}))
     }
 
-    dispatch(appActions.setLoading({valueLoading: 'finishLoading'}))
+   /* dispatch(appActions.setLoading({valueLoading: 'finishLoading'}))*/
 }
