@@ -4,7 +4,6 @@ import {appActions} from "app/appReducer";
 import {createSlice} from "@reduxjs/toolkit";
 import {todolActions, todolistThunk} from "../todolist/TodolistReducer";
 import {createAppAsyncThunk} from "common/utils/createAppAsyncThunk";
-import {utilsFanctionForMethodCatch} from "common/utils/utilsFanctionForMethodCatch";
 import {utilsFanctionForShowError} from "common/utils/utilsFanctionForShowError";
 import {thunkTryCatch} from "common/utils/thunkTryCatch";
 
@@ -170,7 +169,7 @@ const slice = createSlice({
                 delete state[actoin.payload.idTodolist]
             })
             .addCase(todolActions.deleteDataWhenLogOut, (state, action) => {
-                state = {}
+                return  {}
             })
             .addCase(todolistThunk.setTodolists.fulfilled, (state, actoin) => {
                 actoin.payload.todolists.forEach((el: any) => {

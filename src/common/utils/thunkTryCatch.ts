@@ -4,6 +4,7 @@ import {DispatchType, StateStoreType} from "app/store";
 import {utilsFanctionForMethodCatch} from "common/utils/utilsFanctionForMethodCatch";
 
 
+
 export const thunkTryCatch = async (thunkAPI: BaseThunkAPI<StateStoreType, any, DispatchType, null>, logic: Function) => {
     try {
         thunkAPI.dispatch(appActions.setLoading(
@@ -17,3 +18,4 @@ export const thunkTryCatch = async (thunkAPI: BaseThunkAPI<StateStoreType, any, 
             {valueLoading: 'finishLoading'}))
     }
 };
+

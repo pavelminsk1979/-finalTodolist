@@ -110,8 +110,8 @@ const slice = createSlice({
             const index = state.findIndex(el => el.id === action.payload.idTodolist)
             state[index].disableStatus = action.payload.disableValue
         },
-        deleteDataWhenLogOut(state, action: PayloadAction<{}>) {
-            state = []
+        deleteDataWhenLogOut(state) {
+            return  []
         },
     },
     extraReducers: builder => {
@@ -152,21 +152,3 @@ export const todolistThunk = {setTodolists, createTodolist, deleteTodolist,chang
 
 
 
-
-/*export const setTodolists = () => (dispatch: any) => {
-    dispatch(appActions.setLoading({valueLoading: 'loading'}))
-    todolistApi.getTodolists()
-        .then((respons) => {
-            dispatch(todolActions.setTodolists({todolists:respons.data}))
-            dispatch(appActions.setLoading(
-                {valueLoading: 'finishLoading'}))
-            return respons.data   /!* todolists: TodolistType[]*!/
-        })
-        .then((todolArray) => {
-            todolArray.forEach(el => dispatch(taskThunks.setTasks(el.id)))
-        })
-        .catch((error) => {
-            utilsFanctionForMethodCatch(error.message, dispatch)
-        })
-
-}*/
