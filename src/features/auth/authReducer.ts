@@ -71,41 +71,4 @@ export const authThunk = {login,logOut}
 
 
 
-/*const logOut = createAppAsyncThunk<{value:boolean}>('auth/logOut',
-    async (_,thunkAPI)=>{
-        const {dispatch, rejectWithValue} = thunkAPI
-        try {
-            dispatch(appActions.setLoading({valueLoading:'loading'}))
-            const respons = await  authApi.logOut()
-            if (respons.data.resultCode === 0) {
-                dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
-                return {value:false}
-            } else {
-                return rejectWithValue(null)
-            }
-        }catch (e) {
-            utilsFanctionForMethodCatch(e, dispatch)
-            return rejectWithValue(null)
-        }
-    })*/
-/*
-const login = createAppAsyncThunk<{value:boolean},{data:LoginDataType}>('auth/login',
-    async (arg,thunkAPI)=>{
-        const {dispatch, rejectWithValue} = thunkAPI
-        try {
-            dispatch(appActions.setLoading({valueLoading:'loading'}))
-            const respons = await  authApi.logIn(arg.data)
-            if (respons.data.resultCode === 0) {
-                dispatch(appActions.setLoading(
-                    {valueLoading:'finishLoading'}))
-                return {value:true}
-            } else {
-                return rejectWithValue(null)
-            }
-        }catch (e) {
-            utilsFanctionForMethodCatch(e, dispatch)
-            return rejectWithValue(null)
-        }
-    })*/
 
