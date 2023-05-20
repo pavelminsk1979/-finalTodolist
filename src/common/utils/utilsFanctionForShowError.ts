@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {appActions} from "../../app/appReducer";
+import {appActions} from "app/appReducer";
 
 export const utilsFanctionForShowError = (messages: string[], dispatch: Dispatch) => {
     if (messages.length) {
@@ -7,5 +7,5 @@ export const utilsFanctionForShowError = (messages: string[], dispatch: Dispatch
     } else {
         dispatch(appActions.errorShow({error: 'Some error'}))
     }
-    dispatch(appActions.setLoading({valueLoading: 'finishLoading'}))
+    /*dispatch(appActions.setLoading({valueLoading: 'finishLoading'}))*/
 }
