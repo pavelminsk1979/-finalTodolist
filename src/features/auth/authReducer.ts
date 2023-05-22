@@ -5,6 +5,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {createAppAsyncThunk} from "common/utils/createAppAsyncThunk";
 import {thunkTryCatch} from "common/utils/thunkTryCatch";
 import {todolActions} from "features/todolist/TodolistReducer";
+import {utilsFanctionForShowError} from "common/utils/utilsFanctionForShowError";
 
 
 type initialStateAuthReducerType = {
@@ -18,11 +19,12 @@ const initialStateAuthReducer: initialStateAuthReducerType = {
 const login = createAppAsyncThunk<{value:boolean},{data:LoginDataType}>('auth/login',
     async (arg,thunkAPI)=>{
     return thunkTryCatch(thunkAPI, async () => {
-        const { rejectWithValue} = thunkAPI
+        const {dispatch, rejectWithValue} = thunkAPI
         const respons = await  authApi.logIn(arg.data)
         if (respons.data.resultCode === 0) {
             return {value:true}
         } else {
+            utilsFanctionForShowError(respons.data.messages, dispatch)
             return rejectWithValue(null)
         }
     })

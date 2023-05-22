@@ -8,12 +8,12 @@ import {taskThunks} from "features/task/TasksReducer";
 import {todolActions, todolistThunk
 } from "features/todolist/TodolistReducer";
 import {useSelector} from "react-redux";
-import { useAppDispatch} from "app/store";
+import { useAppDispatch} from "features/app/store";
 import { FilterType} from "common/types";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
-import {selectStatusLoading} from "app/appSelectors";
+import {selectStatusLoading} from "features/app/appSelectors";
 import {selectIsIsLoggedIn} from "features/auth/authSelectors";
 import {selectTasks} from "features/task/taskSelectors";
 import {selectTodolists} from "features/todolist/todolistsSelectors";

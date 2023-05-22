@@ -16,7 +16,7 @@ import Coffee from "@mui/icons-material/Coffee";
 import Liquor from "@mui/icons-material/Liquor";
 import LocalHotel from "@mui/icons-material/LocalHotel";
 import SmokingRooms from "@mui/icons-material/SmokingRooms";
-import {useAppDispatch} from "app/store";
+import {useAppDispatch} from "features/app/store";
 import {authThunk} from "features/auth/authReducer";
 
 

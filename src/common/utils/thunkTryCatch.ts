@@ -1,6 +1,6 @@
 import {BaseThunkAPI} from "@reduxjs/toolkit/dist/createAsyncThunk";
-import {appActions} from "app/appReducer";
-import {DispatchType, StateStoreType} from "app/store";
+import {appActions} from "features/app/appReducer";
+import {DispatchType, StateStoreType} from "features/app/store";
 import {utilsFanctionForMethodCatch} from "common/utils/utilsFanctionForMethodCatch";
 
 

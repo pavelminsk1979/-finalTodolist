@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {appActions} from "app/appReducer";
+import {appActions} from "features/app/appReducer";
 
 export const utilsFanctionForShowError = (messages: string[], dispatch: Dispatch) => {
     if (messages.length) {

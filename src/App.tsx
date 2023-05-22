@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import PrimarySearchAppBar from "../Components/AppBar";
+import PrimarySearchAppBar from "Components/AppBar";
 import {RootTodolist} from "Components/RootTodolist";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "Components/Login";
-import {useAppDispatch} from "./store";
+import {useAppDispatch} from "features/app/store";
 import {useSelector} from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import {selectIsInitialized} from "./appSelectors";
-import {appThunk} from "app/appReducer";
+import {selectIsInitialized} from "features/app/appSelectors";
+import {appThunk} from "features/app/appReducer";
 
 
 

@@ -1,7 +1,7 @@
 
 import {todolistApi} from "api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "common/types";
-import {appActions} from "app/appReducer";
+import {appActions} from "features/app/appReducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {taskThunks} from "../task/TasksReducer";
 import {utilsFanctionForMethodCatch} from "common/utils/utilsFanctionForMethodCatch";

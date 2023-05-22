@@ -1,6 +1,6 @@
 import {taskApi} from "api/api";
 import {TaskStatus, TaskType} from "common/types";
-import {appActions} from "app/appReducer";
+import {appActions} from "features/app/appReducer";
 import {createSlice} from "@reduxjs/toolkit";
 import {todolActions, todolistThunk} from "../todolist/TodolistReducer";
 import {createAppAsyncThunk} from "common/utils/createAppAsyncThunk";
