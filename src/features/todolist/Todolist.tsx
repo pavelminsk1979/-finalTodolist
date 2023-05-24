@@ -6,19 +6,16 @@ import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "../task/Task";
 import {CommonTodolistType, FilterType, TaskStatus} from "common/types";
-import {StateTaskType} from "../task/TasksReducer";
+import {StateTaskType, taskThunks} from "../task/TasksReducer";
+import {useAppDispatch} from "features/app/store";
 
 
 type TodolistType = {
     filter: FilterType
     title: string
-    deleteTask: (idTodolist: string, idTask: string) => void
     changeTitleTodolist: (idTodolist: string, editTitle: string) => void
-    changeTitleTask: (idTodolist: string, idTask: string, editTitle: string) => void
     deleteTodolist: (idTodolist: string) => void
-    changeCheckboxTask: (idTodolist: string, idTask: string, valueCheckbox: boolean) => void
     filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
-    createTask: (idTodolist: string, text: string) => void
     todolist: CommonTodolistType
     tasks: StateTaskType
     disableValue: boolean
@@ -27,26 +24,18 @@ type TodolistType = {
 export const Todolist = ({
                              title,
                              tasks,
-                             deleteTask,
                              filterTodolist,
-                             createTask,
-                             changeCheckboxTask,
                              filter,
-                             todolist, deleteTodolist, changeTitleTodolist, changeTitleTask, disableValue
+                             todolist, deleteTodolist, changeTitleTodolist, disableValue
                          }: TodolistType) => {
 
+    const dispatch = useAppDispatch()
 
-    const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
-        changeCheckboxTask(todolist.id, idTask, valueCheckbox)
-    }
 
     const createTaskHundler = useCallback((text: string) => {
-        createTask(todolist.id, text)
+        dispatch(taskThunks.createTask({idTodolist:todolist.id, text}))
     }, [])
 
-    const deleteTaskHandler = (idTask: string) => {
-        deleteTask(todolist.id, idTask)
-    }
 
     const onClickFiltrTodolist = (valueFilter: FilterType) => {
         filterTodolist(todolist.id, valueFilter)
@@ -58,10 +47,6 @@ export const Todolist = ({
 
     const changeTitleTodolistHundler = (editTitle: string) => {
         changeTitleTodolist(todolist.id, editTitle)
-    }
-
-    const changeTitleTaskHundler = (idTask: string, editTitle: string) => {
-        changeTitleTask(todolist.id, idTask, editTitle)
     }
 
     let filterTasks = tasks[todolist.id]
@@ -100,9 +85,7 @@ export const Todolist = ({
                     filterTasks.map(aloneTask => {
                         return (
                             <Task
-                                callbackDel={deleteTaskHandler}
-                                callbackChangeTitle={changeTitleTaskHundler}
-                                callbackCheckbox={changeCheckboxTaskHundler}
+                                idTodolist={todolist.id}
                                 task={aloneTask}
                                 key={aloneTask.id}/>
                         )

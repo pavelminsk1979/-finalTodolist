@@ -5,30 +5,31 @@ import CancelPresentation from "@mui/icons-material/CancelPresentation";
 import {TaskStatus, TaskType} from "common/types";
 import {EditModeTitle} from "Components/EditModeTitle";
 import st from "./Task.module.css"
+import {useAppDispatch} from "features/app/store";
+import { taskThunks } from "./TasksReducer";
 
 
 
 type TaskComponentType = {
     task: TaskType
-    callbackDel:(idTask: string)=>void
-    callbackCheckbox:(idTask: string, valueCheckbox: boolean)=>void
-    callbackChangeTitle:(idTask: string, editTitle: string)=>void
-    
+    idTodolist:string
 }
 
 export const Task = (
-    {task,callbackDel,callbackCheckbox,callbackChangeTitle}:TaskComponentType) => {
+    {task,idTodolist}:TaskComponentType) => {
+
+    const dispatch = useAppDispatch()
 
     const onClickDeleteTask = (idTask: string) => {
-        callbackDel( idTask)
+        dispatch(taskThunks.deleteTask({idTodolist, idTask}))
     }
 
     const changeCheckboxTaskHundler = (idTask: string, valueCheckbox: boolean) => {
-        callbackCheckbox(idTask, valueCheckbox)
+        dispatch(taskThunks.changeCheckboxTask({idTodolist, idTask, valueCheckbox}))
     }
 
     const changeTitleTaskHundler = (idTask: string, editTitle: string) => {
-        callbackChangeTitle( idTask, editTitle)
+        dispatch(taskThunks.changeTitleTask({idTodolist, idTask, editTitle}))
     }
 
   return(

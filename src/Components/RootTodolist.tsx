@@ -61,25 +61,6 @@ export function RootTodolist() {
     }, [])
 
 
-    const changeTitleTask = (idTodolist: string, idTask: string, editTitle: string) => {
-        dispatch(taskThunks.changeTitleTask({idTodolist, idTask, editTitle}))
-    }
-
-
-    const createTask = (idTodolist: string, text: string) => {
-        dispatch(taskThunks.createTask({idTodolist, text}))
-    }
-
-    const changeCheckboxTask = (idTodolist: string, idTask: string,
-                                valueCheckbox: boolean) => {
-
-        dispatch(taskThunks.changeCheckboxTask({idTodolist, idTask, valueCheckbox}))
-    }
-
-    const deleteTask = (idTodolist: string, idTask: string) => {
-        dispatch(taskThunks.deleteTask({idTodolist, idTask}))
-    }
-
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
     }
@@ -99,18 +80,13 @@ export function RootTodolist() {
                 <Grid container spacing={3}>
                     {
                         todolists.map(todol => {
-
                             return <Grid item key={todol.id}>
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
-                                        changeTitleTask={changeTitleTask}
                                         changeTitleTodolist={changeTitleTodolist}
                                         deleteTodolist={deleteTodolist}
                                         filter={todol.filter}
-                                        changeCheckboxTask={changeCheckboxTask}
-                                        createTask={createTask}
                                         filterTodolist={filterTodolist}
-                                        deleteTask={deleteTask}
                                         tasks={tasks}
                                         todolist={todol}
                                         title={todol.title}
