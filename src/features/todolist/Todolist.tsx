@@ -8,45 +8,43 @@ import {Task} from "../task/Task";
 import {CommonTodolistType, FilterType, TaskStatus} from "common/types";
 import {StateTaskType, taskThunks} from "../task/TasksReducer";
 import {useAppDispatch} from "features/app/store";
+import {todolActions, todolistThunk} from "features/todolist/TodolistReducer";
 
 
-type TodolistType = {
+type PropsType = {
     filter: FilterType
     title: string
-    changeTitleTodolist: (idTodolist: string, editTitle: string) => void
-    deleteTodolist: (idTodolist: string) => void
-    filterTodolist: (idTodolist: string, valueFilter: FilterType) => void
     todolist: CommonTodolistType
     tasks: StateTaskType
     disableValue: boolean
 }
 
-export const Todolist = ({
-                             title,
-                             tasks,
-                             filterTodolist,
-                             filter,
-                             todolist, deleteTodolist, changeTitleTodolist, disableValue
-                         }: TodolistType) => {
+export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsType) => {
 
     const dispatch = useAppDispatch()
 
 
     const createTaskHundler = useCallback((text: string) => {
-        dispatch(taskThunks.createTask({idTodolist:todolist.id, text}))
+        dispatch(taskThunks.createTask({idTodolist: todolist.id, text}))
     }, [])
 
 
-    const onClickFiltrTodolist = (valueFilter: FilterType) => {
-        filterTodolist(todolist.id, valueFilter)
+    const changeTodolistFilter = (valueFilter: FilterType) => {
+        dispatch(todolActions.filterTodolist({
+            idTodolist: todolist.id,
+            valueFilter
+        }))
     }
 
     const deleteTodolistHundler = () => {
-        deleteTodolist(todolist.id)
+        dispatch(todolistThunk.deleteTodolist({idTodolist: todolist.id}))
     }
 
     const changeTitleTodolistHundler = (editTitle: string) => {
-        changeTitleTodolist(todolist.id, editTitle)
+        dispatch(todolistThunk.changeTitleTodolist({
+            idTodolist: todolist.id,
+            editTitle
+        }))
     }
 
     let filterTasks = tasks[todolist.id]
@@ -97,19 +95,19 @@ export const Todolist = ({
                     color={'secondary'}
                     size={filter === 'all' ? 'medium' : 'small'}
                     variant={filter === 'all' ? "contained" : 'outlined'}
-                    onClick={() => onClickFiltrTodolist('all')}>All
+                    onClick={() => changeTodolistFilter('all')}>All
                 </Button>
                 <Button
                     color={'secondary'}
                     size={filter === 'new' ? 'medium' : 'small'}
                     variant={filter === 'new' ? "contained" : 'outlined'}
-                    onClick={() => onClickFiltrTodolist('new')}>New
+                    onClick={() => changeTodolistFilter('new')}>New
                 </Button>
                 <Button
                     color={'secondary'}
                     size={filter === 'completed' ? 'medium' : 'small'}
                     variant={filter === 'completed' ? "contained" : 'outlined'}
-                    onClick={() => onClickFiltrTodolist('completed')}>Completed
+                    onClick={() => changeTodolistFilter('completed')}>Completed
                 </Button>
             </div>
 

@@ -10,13 +10,13 @@ import { taskThunks } from "./TasksReducer";
 
 
 
-type TaskComponentType = {
+type PropsType = {
     task: TaskType
     idTodolist:string
 }
 
 export const Task = (
-    {task,idTodolist}:TaskComponentType) => {
+    {task,idTodolist}:PropsType) => {
 
     const dispatch = useAppDispatch()
 

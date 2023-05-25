@@ -4,12 +4,9 @@ import {CreateItemForm} from "./CreateItemForm";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import {taskThunks} from "features/task/TasksReducer";
-import {todolActions, todolistThunk
-} from "features/todolist/TodolistReducer";
+import {todolistThunk} from "features/todolist/TodolistReducer";
 import {useSelector} from "react-redux";
 import { useAppDispatch} from "features/app/store";
-import { FilterType} from "common/types";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
@@ -40,21 +37,6 @@ export function RootTodolist() {
         dispatch(todolistThunk.setTodolists())
     }, [])
 
-    const filterTodolist = (idTodolist: string, valueFilter: FilterType) => {
-        dispatch(todolActions.filterTodolist({
-            idTodolist: idTodolist,
-            valueFilter: valueFilter
-        }))
-    }
-
-    const deleteTodolist = (idTodolist: string) => {
-        dispatch(todolistThunk.deleteTodolist({idTodolist}))
-    }
-
-
-    const changeTitleTodolist = (idTodolist: string, editTitle: string) => {
-        dispatch(todolistThunk.changeTitleTodolist({idTodolist, editTitle}))
-    }
 
     const createTodolist = useCallback((text: string) => {
         dispatch(todolistThunk.createTodolist({text}))
@@ -83,10 +65,7 @@ export function RootTodolist() {
                             return <Grid item key={todol.id}>
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
-                                        changeTitleTodolist={changeTitleTodolist}
-                                        deleteTodolist={deleteTodolist}
                                         filter={todol.filter}
-                                        filterTodolist={filterTodolist}
                                         tasks={tasks}
                                         todolist={todol}
                                         title={todol.title}
