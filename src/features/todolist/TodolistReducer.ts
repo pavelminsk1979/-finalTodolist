@@ -1,4 +1,3 @@
-
 import {todolistApi} from "api/api";
 import {CommonTodolistType, FilterType, TodolistType} from "common/types";
 import {appActions} from "features/app/appReducer";
@@ -7,7 +6,6 @@ import {taskThunks} from "../task/TasksReducer";
 import {utilsFanctionForMethodCatch} from "common/utils/utilsFanctionForMethodCatch";
 import {utilsFanctionForShowError} from "common/utils/utilsFanctionForShowError";
 import {createAppAsyncThunk} from "common/utils/createAppAsyncThunk";
-
 
 
 const initialTodolState: CommonTodolistType[] = []
@@ -70,7 +68,7 @@ const deleteTodolist = createAppAsyncThunk<{ idTodolist: string }, { idTodolist:
     })
 
 
-const changeTitleTodolist = createAppAsyncThunk<{idTodolist: string, editTitle: string},{idTodolist: string, editTitle: string}>('todo/changeTitleTodolist', async (arg,thunkAPI)=>{
+const changeTitleTodolist = createAppAsyncThunk<{ idTodolist: string, editTitle: string }, { idTodolist: string, editTitle: string }>('todo/changeTitleTodolist', async (arg, thunkAPI) => {
     const {dispatch, rejectWithValue} = thunkAPI
     try {
         dispatch(appActions.setLoading({valueLoading: 'loading'}))
@@ -79,7 +77,7 @@ const changeTitleTodolist = createAppAsyncThunk<{idTodolist: string, editTitle: 
         if (respons.data.resultCode === 0) {
             dispatch(appActions.setLoading(
                 {valueLoading: 'finishLoading'}))
-            return {idTodolist:arg.idTodolist, editTitle:arg.editTitle}
+            return {idTodolist: arg.idTodolist, editTitle: arg.editTitle}
         } else {
             utilsFanctionForShowError(respons.data.messages, dispatch)
             return rejectWithValue(null)
@@ -89,7 +87,6 @@ const changeTitleTodolist = createAppAsyncThunk<{idTodolist: string, editTitle: 
         return rejectWithValue(null)
     }
 })
-
 
 
 const slice = createSlice({
@@ -111,12 +108,12 @@ const slice = createSlice({
             state[index].disableStatus = action.payload.disableValue
         },
         deleteDataWhenLogOut(state) {
-            return  []
+            return []
         },
     },
     extraReducers: builder => {
         builder
-            .addCase(changeTitleTodolist.fulfilled,(state,action)=>{
+            .addCase(changeTitleTodolist.fulfilled, (state, action) => {
                 const index = state.findIndex(el => el.id === action.payload.idTodolist)
                 state[index].title = action.payload.editTitle
 
@@ -147,7 +144,7 @@ export const todolistReducer = slice.reducer
 
 export const todolActions = slice.actions
 
-export const todolistThunk = {setTodolists, createTodolist, deleteTodolist,changeTitleTodolist}
+export const todolistThunk = {setTodolists, createTodolist, deleteTodolist, changeTitleTodolist}
 
 
 

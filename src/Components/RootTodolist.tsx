@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import {todolistThunk} from "features/todolist/TodolistReducer";
 import {useSelector} from "react-redux";
-import { useAppDispatch} from "features/app/store";
+import {useAppDispatch} from "features/app/store";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "./ErrorSnackBar";
 import {Navigate} from "react-router-dom";
@@ -14,7 +14,6 @@ import {selectStatusLoading} from "features/app/appSelectors";
 import {selectIsIsLoggedIn} from "features/auth/authSelectors";
 import {selectTasks} from "features/task/taskSelectors";
 import {selectTodolists} from "features/todolist/todolistsSelectors";
-
 
 
 export function RootTodolist() {
@@ -65,11 +64,8 @@ export function RootTodolist() {
                             return <Grid item key={todol.id}>
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
-                                        filter={todol.filter}
                                         tasks={tasks}
-                                        todolist={todol}
-                                        title={todol.title}
-                                        disableValue={todol.disableStatus}/>
+                                        todolist={todol}/>
                                 </Paper>
                             </Grid>
                         })

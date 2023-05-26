@@ -18,14 +18,14 @@ const instance = axios.create({
 
 export const authApi = {
     logIn(data: LoginDataType) {
-        return instance.post<AxiosResponseType<{userId:number}>>('auth/login',data)
+        return instance.post<AxiosResponseType<{ userId: number }>>('auth/login', data)
     },
 
     logOut() {
         return instance.delete<AxiosResponseType>('auth/login')
     },
 
-    me () {
+    me() {
         return instance.get<AxiosResponseType<MeResponseType>>('auth/me')
     }
 }

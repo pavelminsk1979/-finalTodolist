@@ -1,13 +1,13 @@
 import React, {ChangeEvent, useState} from "react";
 import TextField from "@mui/material/TextField";
 
-type EditModeTitleType = {
+type PropsType = {
     title: string
     callback: (editTitle: string) => void
 }
 
 
-export const EditModeTitle = ({title, callback}: EditModeTitleType) => {
+export const EditModeTitle = ({title, callback}: PropsType) => {
     const [editMode, setEditMode] = useState(false)
     const [editTitle, setEditTitle] = useState(title)
 

@@ -10,7 +10,6 @@ import {selectIsInitialized} from "features/app/appSelectors";
 import {appThunk} from "features/app/appReducer";
 
 
-
 function App() {
 
     const dispatch = useAppDispatch()
@@ -21,10 +20,11 @@ function App() {
         dispatch(appThunk.initializeApp())
     })
 
-    if(!isInitialized){
+    if (!isInitialized) {
         return <div style={{
-            position:'fixed',top:'30%',textAlign:'center',width:'100%'}}>
-            <CircularProgress />
+            position: 'fixed', top: '30%', textAlign: 'center', width: '100%'
+        }}>
+            <CircularProgress/>
         </div>
 
     }
@@ -36,7 +36,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<RootTodolist/>}/>
                 <Route path='login' element={<Login/>}/>
-                <Route path='*' element={<Navigate to = '/404'/>}/>
+                <Route path='*' element={<Navigate to='/404'/>}/>
                 <Route path='404' element={<h3>404:PAGE NOT FOUND</h3>}/>
             </Routes>
 

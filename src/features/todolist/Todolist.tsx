@@ -1,25 +1,22 @@
 import React, {useCallback} from "react";
 import {CreateItemForm} from "Components/CreateItemForm";
 import {EditModeTitle} from "Components/EditModeTitle";
-import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import {Task} from "../task/Task";
-import {CommonTodolistType, FilterType, TaskStatus} from "common/types";
+import {CommonTodolistType, TaskStatus} from "common/types";
 import {StateTaskType, taskThunks} from "../task/TasksReducer";
 import {useAppDispatch} from "features/app/store";
-import {todolActions, todolistThunk} from "features/todolist/TodolistReducer";
+import { todolistThunk} from "features/todolist/TodolistReducer";
+import {FilterTaskButton} from "features/todolist/filterTaskButton/FilterTaskButton";
 
 
 type PropsType = {
-    filter: FilterType
-    title: string
     todolist: CommonTodolistType
     tasks: StateTaskType
-    disableValue: boolean
 }
 
-export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsType) => {
+export const Todolist = ({tasks, todolist}: PropsType) => {
 
     const dispatch = useAppDispatch()
 
@@ -28,13 +25,6 @@ export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsTy
         dispatch(taskThunks.createTask({idTodolist: todolist.id, text}))
     }, [])
 
-
-    const changeTodolistFilter = (valueFilter: FilterType) => {
-        dispatch(todolActions.filterTodolist({
-            idTodolist: todolist.id,
-            valueFilter
-        }))
-    }
 
     const deleteTodolistHundler = () => {
         dispatch(todolistThunk.deleteTodolist({idTodolist: todolist.id}))
@@ -59,14 +49,13 @@ export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsTy
 
     return (
         <div>
-
             <h3>
                 <EditModeTitle
                     callback={changeTitleTodolistHundler}
-                    title={title}/>
+                    title={todolist.title}/>
 
                 <IconButton
-                    disabled={disableValue}
+                    disabled={todolist.disableStatus}
                     onClick={deleteTodolistHundler}>
                     <DeleteForever/>
                 </IconButton>
@@ -74,7 +63,7 @@ export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsTy
             </h3>
 
             <CreateItemForm
-                disableValue={disableValue}
+                disableValue={todolist.disableStatus}
                 name={'Task'}
                 callback={createTaskHundler}/>
 
@@ -90,27 +79,7 @@ export const Todolist = ({title, tasks, filter, todolist, disableValue}: PropsTy
                     })
                 }
             </div>
-            <div>
-                <Button
-                    color={'secondary'}
-                    size={filter === 'all' ? 'medium' : 'small'}
-                    variant={filter === 'all' ? "contained" : 'outlined'}
-                    onClick={() => changeTodolistFilter('all')}>All
-                </Button>
-                <Button
-                    color={'secondary'}
-                    size={filter === 'new' ? 'medium' : 'small'}
-                    variant={filter === 'new' ? "contained" : 'outlined'}
-                    onClick={() => changeTodolistFilter('new')}>New
-                </Button>
-                <Button
-                    color={'secondary'}
-                    size={filter === 'completed' ? 'medium' : 'small'}
-                    variant={filter === 'completed' ? "contained" : 'outlined'}
-                    onClick={() => changeTodolistFilter('completed')}>Completed
-                </Button>
-            </div>
-
+            <FilterTaskButton todolist={todolist}/>
         </div>
     )
 }

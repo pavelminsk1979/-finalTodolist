@@ -6,17 +6,16 @@ import {TaskStatus, TaskType} from "common/types";
 import {EditModeTitle} from "Components/EditModeTitle";
 import st from "./Task.module.css"
 import {useAppDispatch} from "features/app/store";
-import { taskThunks } from "./TasksReducer";
-
+import {taskThunks} from "./TasksReducer";
 
 
 type PropsType = {
     task: TaskType
-    idTodolist:string
+    idTodolist: string
 }
 
 export const Task = (
-    {task,idTodolist}:PropsType) => {
+    {task, idTodolist}: PropsType) => {
 
     const dispatch = useAppDispatch()
 
@@ -32,31 +31,29 @@ export const Task = (
         dispatch(taskThunks.changeTitleTask({idTodolist, idTask, editTitle}))
     }
 
-  return(
-      <div className={task.status===TaskStatus.Complete
-          ? st.completeTask : ''}
-           key={task.id}>
+    return (
+        <div className={task.status === TaskStatus.Complete
+            ? st.completeTask : ''}
+             key={task.id}>
 
-          <Checkbox
-              checked={task.status===TaskStatus.Complete}
-              onChange={(event) => changeCheckboxTaskHundler(
-                  task.id, event.currentTarget.checked
-              )}
-              color="success" />
+            <Checkbox
+                checked={task.status === TaskStatus.Complete}
+                onChange={(event) => changeCheckboxTaskHundler(
+                    task.id, event.currentTarget.checked
+                )}
+                color="success"/>
 
-          <EditModeTitle
-              callback={(editTitle: string) => changeTitleTaskHundler(
-                  task.id, editTitle)}
-              title={task.title}/>
+            <EditModeTitle
+                callback={(editTitle: string) => changeTitleTaskHundler(
+                    task.id, editTitle)}
+                title={task.title}/>
 
-          <IconButton
-              size={"small"}
-              onClick={
-                  () => onClickDeleteTask(task.id)}>
-              <CancelPresentation/>
-          </IconButton>
-
-
-      </div>
-  )
+            <IconButton
+                size={"small"}
+                onClick={
+                    () => onClickDeleteTask(task.id)}>
+                <CancelPresentation/>
+            </IconButton>
+        </div>
+    )
 }
