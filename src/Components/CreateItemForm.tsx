@@ -19,7 +19,11 @@ export const CreateItemForm = memo(({name, callback, disableValue}: PropsType) =
     const onClickCreateTask = () => {
         if (text.trim() !== '') {
             callback(text.trim())
-            setText('')
+            if(text.length<100){
+                setText('')
+            } else {
+                setInputError  ("The field  must be with  maximum length of '100'")
+            }
         } else {
             setInputError('Text reguared')
         }
